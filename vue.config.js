@@ -38,8 +38,8 @@ module.exports = {
     },
     proxy: {
       // 配置自apis
-      '/api': {
-        target: 'https://pms.memestech.com.cn',
+      '/admin': {
+        target: 'https://eggman.memestech.com.cn',
         // target: 'http://asset.memestech.com.cn',
         changeOrigin: true,
         // ws: true,//websocket支持
