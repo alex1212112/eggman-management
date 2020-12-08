@@ -3,6 +3,7 @@
     <search
       :status-hidden="false"
       :status-list="statusList"
+      :search-hidden="true"
       @search="fetchData"
     />
     <el-table

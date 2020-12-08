@@ -27,6 +27,11 @@
           <el-avatar :size="50" :src="scope.row.avatar" />
         </template>
       </el-table-column>
+      <el-table-column align="center" label="手机">
+        <template slot-scope="scope">
+          {{ scope.row.phone }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="总余额">
         <template slot-scope="scope">
           {{ (parseFloat(scope.row.balance) + parseFloat(scope.row.red_balance)).toFixed(2) }}
