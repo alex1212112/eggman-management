@@ -39,13 +39,13 @@ module.exports = {
     proxy: {
       // 配置自apis
       '/admin': {
-        target: 'https://eggman.memestech.com.cn',
+        target: 'https://api.caidan888.com',
         // target: 'http://asset.memestech.com.cn',
         changeOrigin: true,
         // ws: true,//websocket支持
         secure: false
       }
-    },
+    }
     // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
