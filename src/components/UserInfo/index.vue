@@ -4,7 +4,7 @@
       <el-col>
         <el-card class="box-card" style="margin-top: 10px;">
           <div slot="header" class="clearfix" style="text-align: center">
-            <span>基本信息</span>
+            <el-tag type="danger" effect="dark">基本信息</el-tag>
           </div>
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="用户头像">
@@ -31,8 +31,8 @@
             <el-form-item label="推荐人">
               <div v-if="user.parent">
                 <el-avatar :size="50" :src="user.parent.avatar" />
-                <span>{{ user.parent.nickname }}</span>
-                <span>{{ user.parent.phone }}</span>
+                <el-tag>{{ user.parent.nickname }}</el-tag>
+                <el-tag type="info">{{ user.parent.phone }}</el-tag>
               </div>
               <div v-else>
                 暂无
@@ -46,7 +46,7 @@
       <el-col>
         <el-card class="box-card" style="margin-top: 10px;">
           <div slot="header" class="clearfix" style="text-align: center">
-            <span>资产信息</span>
+            <el-tag type="danger" effect="dark">资产信息</el-tag>
           </div>
           <el-row>
             <el-col :span="8">
@@ -84,7 +84,7 @@
       <el-col>
         <el-card class="box-card" style="margin-top: 10px;">
           <div slot="header" class="clearfix" style="text-align: center">
-            <span>抽奖记录</span>
+            <el-tag type="danger" effect="dark">抽奖记录</el-tag>
           </div>
           <el-table
             v-loading="listLoading"
@@ -136,7 +136,13 @@
             </el-table-column>
             <el-table-column align="center" label="中奖状态">
               <template slot-scope="scope">
-                {{ scope.row.status === 1 ? '待开奖' : scope.row.status === 2 ? '中奖' : scope.row.status === 3 ? '不中奖' : scope.row.status === 4 ? '开奖失败' : '' }}
+                <el-tag
+                  :type="scope.row.status === 1 ? 'info' : scope.row.status === 2 ? 'warning' : scope.row.status === 3 ? 'success' : scope.row.status === 4 ? 'danger' : '' "
+                  effect="dark"
+                >
+                  {{ scope.row.status === 1 ? '待开奖' : scope.row.status === 2 ? '中奖' : scope.row.status === 3 ? '不中奖' : scope.row.status === 4 ? '开奖失败' : '' }}
+                </el-tag>
+
               </template>
             </el-table-column>
             <el-table-column align="center" label="参与红包">

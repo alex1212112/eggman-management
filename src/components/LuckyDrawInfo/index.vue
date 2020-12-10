@@ -4,7 +4,7 @@
       <el-col>
         <el-card class="box-card" style="margin-top: 10px;">
           <div slot="header" class="clearfix" style="text-align: center">
-            <span>抽奖信息</span>
+            <el-tag type="danger" effect="dark">抽奖信息</el-tag>
           </div>
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="抽奖 ID">
@@ -54,7 +54,7 @@
       <el-col>
         <el-card class="box-card" style="margin-top: 10px;">
           <div slot="header" class="clearfix" style="text-align: center">
-            <span>开奖信息</span>
+            <el-tag type="danger" effect="dark">开奖信息</el-tag>
           </div>
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="开奖 ID">
@@ -80,7 +80,7 @@
       <el-col>
         <el-card class="box-card" style="margin-top: 10px;">
           <div slot="header" class="clearfix" style="text-align: center">
-            <span>中奖信息</span>
+            <el-tag type="danger" effect="dark">中奖信息</el-tag>
           </div>
           <el-table
             v-loading="selectListLoading"
@@ -95,9 +95,9 @@
                 <el-avatar :size="50" :src="scope.row.user.avatar" />
               </template>
             </el-table-column>
-            <el-table-column align="center" label="用户信息" width="95">
+            <el-table-column align="center" label="用户信息">
               <template slot-scope="scope">
-                {{ scope.row.user.nickname }} | {{ scope.row.user.phone }}
+                <el-tag>{{ scope.row.user.nickname }}</el-tag><el-tag type="info">{{ scope.row.user.phone }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column align="center" label="不中奖权重" width="95">
@@ -134,7 +134,7 @@
       <el-col>
         <el-card class="box-card" style="margin-top: 10px;">
           <div slot="header" class="clearfix" style="text-align: center">
-            <span>未中奖信息</span>
+            <el-tag type="danger" effect="dark">未中奖信息</el-tag>
           </div>
           <el-table
             v-loading="noSelectListLoading"
@@ -149,9 +149,9 @@
                 <el-avatar :size="50" :src="scope.row.user.avatar" />
               </template>
             </el-table-column>
-            <el-table-column align="center" label="用户信息" width="95">
+            <el-table-column align="center" label="用户信息">
               <template slot-scope="scope">
-                {{ scope.row.user.nickname }} | {{ scope.row.user.phone }}
+                <el-tag>{{ scope.row.user.nickname }}</el-tag><el-tag type="info">{{ scope.row.user.phone }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column align="center" label="不中奖权重" width="95">

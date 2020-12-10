@@ -30,7 +30,12 @@
       </el-table-column>
       <el-table-column align="center" label="提现渠道" width="95">
         <template slot-scope="scope">
-          {{ scope.row.cash_way === 'wechat' ? '微信' : scope.row.cash_way === 'alipay' ? '支付宝' : '' }}
+          <el-tag
+            :type="scope.row.cash_way === 'wechat' ? 'success' : scope.row.cash_way === 'alipay' ? '' : 'danger'"
+            effect="dark"
+          >
+            {{ scope.row.cash_way === 'wechat' ? '微信' : scope.row.cash_way === 'alipay' ? '支付宝' : '' }}
+          </el-tag>
         </template>
       </el-table-column>
       <!--      <el-table-column align="center" label="支付方式" width="180">-->
@@ -76,7 +81,7 @@
       <el-table-column label="状态" align="center">
         <template slot-scope="scope">
           <el-tag
-            :type="scope.row.status === 1 ? '' : scope.row.status === 2 ? 'success' : scope.row.status === 3 ? 'warning' : 'danger'"
+            :type="scope.row.status === 1 ? '' : scope.row.status === 2 ? 'success' : scope.row.status === 3 ? 'danger' : 'warning'"
             effect="dark"
           >
             {{ scope.row.status_name }}

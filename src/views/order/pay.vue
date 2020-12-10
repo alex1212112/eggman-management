@@ -45,7 +45,7 @@
       </el-table-column>
       <el-table-column align="center" label="用户信息" width="180">
         <template slot-scope="scope">
-          {{ scope.row.nickname }} | {{ scope.row.user_phone }}
+          <el-tag>{{ scope.row.nickname }}</el-tag><el-tag type="info">{{ scope.row.user_phone }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="支付时间" width="180">
@@ -56,7 +56,7 @@
       <el-table-column label="状态" align="center">
         <template slot-scope="scope">
           <el-tag
-            :type="scope.row.status === 1 ? '' : scope.row.status === 2 ? 'warning' : scope.row.status === 3 ? 'success' : 'danger'"
+            :type="scope.row.status === 1 ? '' : scope.row.status === 2 ? 'success' : scope.row.status === 3 ? 'warning' : 'danger'"
             effect="dark"
           >
             {{ scope.row.status_name }}

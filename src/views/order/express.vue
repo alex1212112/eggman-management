@@ -40,12 +40,14 @@
       </el-table-column>
       <el-table-column align="center" label="收货人" width="180">
         <template slot-scope="scope">
-          {{ scope.row.consignee }} | {{ scope.row.phone }}
+          <div v-if="scope.row.phone">
+            <el-tag>{{ scope.row.consignee }}</el-tag><el-tag type="info">{{ scope.row.phone }}</el-tag>
+          </div>
         </template>
       </el-table-column>
       <el-table-column align="center" label="中奖人" width="180">
         <template slot-scope="scope">
-          {{ scope.row.nickname }} | {{ scope.row.user_phone }}
+          <el-tag>{{ scope.row.nickname }}</el-tag><el-tag type="info">{{ scope.row.user_phone }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="收货地址" width="180">
