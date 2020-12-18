@@ -3,6 +3,8 @@
     <search
       :status-hidden="false"
       :status-list="statusList"
+      :export-hidden="false"
+      :export-model="'payOrder'"
       @search="fetchData"
     />
     <el-table
@@ -21,6 +23,11 @@
       <el-table-column align="center" label="订单编号" width="95">
         <template slot-scope="scope">
           {{ scope.row.order_no }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="支付单号" width="95">
+        <template slot-scope="scope">
+          {{ scope.row.pay_no }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="支付渠道" width="95">

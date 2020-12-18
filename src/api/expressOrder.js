@@ -15,3 +15,11 @@ export function putEdit(data) {
     data
   })
 }
+
+export function putInfo(data) {
+  return request({
+    url: 'admin/v1/order/expressInfo',
+    method: 'put',
+    data
+  })
+}

@@ -180,6 +180,41 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-row>
+      <el-col>
+        <el-card class="box-card" style="margin-top: 10px;">
+          <div slot="header" class="clearfix" style="text-align: center">
+            <el-tag type="danger" effect="dark">参与人员</el-tag>
+          </div>
+          <el-table
+            v-loading="noSelectListLoading"
+            :data="otherList"
+            element-loading-text="Loading"
+            border
+            fit
+            highlight-current-row
+          >
+            <el-table-column align="center" label="头像" width="95">
+              <template slot-scope="scope">
+                <el-avatar :size="50" :src="scope.row.user.avatar" />
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="用户信息">
+              <template slot-scope="scope">
+                <el-tag>{{ scope.row.user.nickname }}</el-tag><el-tag type="info">{{ scope.row.user.phone }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="操作">
+              <template slot-scope="scope">
+                <div class="operation-buttons">
+                  <el-button type="warning" size="small" @click="userInfo(scope.row, scope.$index)">用户详情</el-button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+    </el-row>
 
     <el-dialog
       title="查看详情 "
@@ -223,7 +258,8 @@ export default {
         }
       },
       selectList: [],
-      noSelectList: []
+      noSelectList: [],
+      otherList: []
     }
   },
   computed: {
@@ -239,6 +275,7 @@ export default {
         this.lucky_draw = res.data.lucky_draw
         this.selectList = res.data.select_list
         this.noSelectList = res.data.no_select_list
+        this.otherList = res.data.other_list
       })
     },
     loadData(id) {

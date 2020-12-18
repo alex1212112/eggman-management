@@ -2,6 +2,8 @@
   <div class="app-container">
     <search
       :status-hidden="true"
+      :export-hidden="false"
+      :export-model="'user'"
       @search="fetchData"
     />
     <el-table

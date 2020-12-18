@@ -3,6 +3,8 @@
     <search
       :status-hidden="false"
       :status-list="statusList"
+      :export-hidden="false"
+      :export-model="'log'"
       @search="fetchData"
     />
     <el-table

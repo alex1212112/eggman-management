@@ -3,8 +3,23 @@
     <search
       :status-hidden="false"
       :status-list="statusList"
+      :export-hidden="false"
+      :export-model="'expressOrder'"
       @search="fetchData"
     />
+    <el-row style="margin-top: 10px;">
+      <el-upload
+        ref="upload"
+        action="https://api.caidan888.com/admin/v1/upload/excel"
+        :multiple="false"
+        :headers="headers"
+        :on-success="uploadExcel"
+        name="file"
+        :show-file-list="false"
+      >
+        <el-button type="success">批量发货<i class="el-icon-upload el-icon--right" /></el-button>
+      </el-upload>
+    </el-row>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -68,6 +83,7 @@
       <el-table-column align="center" label="操作" width="250">
         <template slot-scope="scope">
           <div class="operation-buttons">
+            <el-button type="warning" size="small" @click="edit(scope.row, scope.$index)">编辑</el-button>
             <el-button v-if="scope.row.status === 1" type="primary" size="small" @click="express(scope.row, scope.$index)">发货</el-button>
           </div>
         </template>
@@ -104,12 +120,49 @@
         <el-button type="primary" @click="updateData()">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      :title="'编辑收货地址'"
+      :visible.sync="dialogEditVisible"
+      width="80%"
+      @close="cancel"
+    >
+      <el-form
+        :model="expressOrder"
+      >
+        <!--        <el-form-item label="省/市/县" :label-width="formLabelWidth">-->
+        <!--          <el-cascader-->
+        <!--            v-model="expressOrder.area_code"-->
+        <!--            :options="options"-->
+        <!--            @change=""></el-cascader>-->
+        <!--        </el-form-item>-->
+        <el-form-item label="详细地址" :label-width="formLabelWidth">
+          <el-input v-model="expressOrder.detail_address" style="width: 195px;" />
+        </el-form-item>
+        <el-form-item label="收货人" :label-width="formLabelWidth">
+          <el-input v-model="expressOrder.consignee" style="width: 195px;" />
+        </el-form-item>
+        <el-form-item label="手机号" :label-width="formLabelWidth">
+          <el-input v-model="expressOrder.phone" style="width: 195px;" />
+        </el-form-item>
+        <el-form-item label="快递名称" :label-width="formLabelWidth">
+          <el-input v-model="expressOrder.express_name" style="width: 195px;" />
+        </el-form-item>
+        <el-form-item label="快递编号" :label-width="formLabelWidth">
+          <el-input v-model="expressOrder.express_no" style="width: 195px;" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogEditVisible = false;getList();">取 消</el-button>
+        <el-button type="primary" @click="updateInfo()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 
 </template>
 
 <script>
-import { getList, putEdit } from '@/api/expressOrder'
+import { getList, putEdit, putInfo } from '@/api/expressOrder'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import Search from '@/components/Search'
 import { getToken } from '@/utils/auth'
@@ -146,11 +199,19 @@ export default {
       dialogHintVisible: false,
       dialogVisible: false,
       dialogSelectGoods: false,
+      dialogEditVisible: false,
       dialogStatus: 'create',
       expressOrder: {
         id: 0,
         express_name: '',
-        express_no: ''
+        express_no: '',
+        // area_code: 0,
+        // province: '',
+        // city: '',
+        // county: '',
+        detail_address: '',
+        consignee: '',
+        phone: ''
       },
       tag: '',
       formLabelWidth: '120px'
@@ -197,6 +258,28 @@ export default {
           this.getList()
         }
       })
+    },
+    updateInfo() {
+      putInfo(this.expressOrder).then(res => {
+        if (res.code === 200) {
+          this.dialogEditVisible = false
+          this.getList()
+        }
+      })
+    },
+    edit(item) {
+      this.expressOrder = item
+      this.dialogEditVisible = true
+    },
+    uploadExcel(res) {
+      if (res.code === 200) {
+        this.$message({
+          message: '批量发货成功',
+          type: 'success'
+        })
+      } else {
+        this.$message.error(res.message)
+      }
     }
   }
 }

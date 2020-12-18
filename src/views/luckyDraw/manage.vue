@@ -3,6 +3,8 @@
     <search
       :status-hidden="false"
       :status-list="statusList"
+      :export-hidden="false"
+      :export-model="'lucky'"
       @search="fetchData"
     />
     <el-row>
@@ -110,6 +112,7 @@
       <el-table-column align="center" label="操作" width="250">
         <template slot-scope="scope">
           <div class="operation-buttons">
+            <el-button type="primary" size="small" @click="copyInfo(scope.row, scope.$index)">复制信息</el-button>
             <el-button v-if="scope.row.status === 1" type="primary" size="small" @click="edit(scope.row, scope.$index)">编辑</el-button>
             <el-button v-if="scope.row.status === 2" type="info" size="small" @click="pause(scope.row, scope.$index)">暂停</el-button>
             <el-button v-if="scope.row.status === 3" type="success" size="small" @click="replay(scope.row, scope.$index)">开启</el-button>
@@ -131,7 +134,7 @@
     />
 
     <el-dialog
-      :title="dialogStatus === 'create' ? '添加抽奖' : '编辑抽奖'"
+      :title="dialogStatus === 'create' ? '添加抽奖' : dialogStatus === 'copy' ? '复制抽奖' : '编辑抽奖'"
       :visible.sync="dialogFormVisible"
       width="80%"
       @close="cancel"
@@ -142,7 +145,49 @@
         <el-row style="margin-bottom: 20px">
           <el-col :span="24">
             <div class="box-center">
-              <img v-if="lucky.main_img" :src="lucky.main_img" class="avatar">
+              <el-upload
+                ref="upload"
+                :action="uploadApi"
+                class="avatar-uploader tex-center"
+                name="file"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :headers="headers"
+              >
+                <img v-if="lucky.lucky_img" :src="lucky.lucky_img" class="avatar" style="width: 345px;height:175px;">
+                <i v-else class="el-icon-plus avatar-uploader-icon" />
+              </el-upload>
+              <div class="text-center" style="margin-top:10px">
+                上传抽奖封面图(像素:690 x 350)
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row style="margin-bottom: 20px">
+          <el-col :span="24">
+            <div class="box-center">
+              <el-upload
+                ref="upload"
+                :action="uploadApi"
+                class="avatar-uploader tex-center"
+                name="file"
+                :show-file-list="false"
+                :on-success="shareUploadAccess"
+                :headers="headers"
+              >
+                <img v-if="lucky.share_img" :src="lucky.share_img" class="avatar" style="width: 375px;height:300px;">
+                <i v-else class="el-icon-plus avatar-uploader-icon" />
+              </el-upload>
+              <div class="text-center" style="margin-top:10px">
+                上传抽奖分享图(像素:750 x 600)
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row style="margin-bottom: 20px">
+          <el-col :span="24">
+            <div class="box-center">
+              <!--              <img v-if="lucky.main_img" :src="lucky.main_img" class="avatar">-->
               <el-button type="success" @click="selectGoods">选择奖品</el-button>
             </div>
           </el-col>
@@ -245,10 +290,17 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row style="margin-bottom: 20px">
+          <el-col :span="24">
+            <el-form-item label="抽奖介绍" :label-width="formLabelWidth">
+              <el-input v-model="lucky.desc" type="textarea" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">确 定</el-button>
+        <el-button type="primary" @click="dialogStatus === 'update' ? updateData() : createData()">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -313,7 +365,7 @@ export default {
   components: { Pagination, Search, Goods, Draw },
   data() {
     return {
-      uploadApi: 'https://eggMan.memestech.com.cn/admin/v1/upload',
+      uploadApi: 'https://api.caidan888.com/admin/v1/upload',
       statusList: [{ id: 0, name: '全部' }, { id: 1, name: '待上线' }, { id: 2, name: '进行中' }, { id: 3, name: '已暂停' }, { id: 4, name: '已下线' }],
       switchLoading: true,
       total: 0,
@@ -325,7 +377,8 @@ export default {
         search_value: '',
         status: null,
         start_time: '',
-        end_time: ''
+        end_time: '',
+        sort: 'desc'
       },
       options: null,
       sellers: null,
@@ -354,7 +407,12 @@ export default {
         access_count: 0,
         fail_count: 0,
         is_free_shipping: 1,
-        shipping_price: '6.00'
+        shipping_price: '6.00',
+        lucky_img: '',
+        lucky_img_id: 0,
+        share_img: '',
+        share_img_id: 0,
+        desc: ''
       },
       tag: '',
       formLabelWidth: '120px'
@@ -411,7 +469,11 @@ export default {
         repeat: 0,
         online_at: '',
         is_free_shipping: 1,
-        shipping_price: '6.00'
+        shipping_price: '6.00',
+        lucky_img: '',
+        lucky_img_id: 0,
+        share_img: '',
+        share_img_id: 0
       }
       this.dialogFormVisible = true
       this.dialogStatus = 'create'
@@ -428,6 +490,11 @@ export default {
       console.log(item, _index)
       this.dialogFormVisible = true
       this.dialogStatus = 'update'
+      this.lucky = item
+    },
+    copyInfo(item, _index) {
+      this.dialogFormVisible = true
+      this.dialogStatus = 'copy'
       this.lucky = item
     },
     online(item, _index) {
@@ -496,8 +563,14 @@ export default {
     handleAvatarSuccess(res) {
       this.$loading().close()
       console.log(res)
-      this.goods.main_img = res.data.url
-      this.goods.main_upload_id = res.data.id
+      this.lucky.lucky_img = res.data.url
+      this.lucky.lucky_img_id = res.data.id
+    },
+    shareUploadAccess(res) {
+      this.$loading().close()
+      console.log(res)
+      this.lucky.share_img = res.data.url
+      this.lucky.share_img_id = res.data.id
     },
     handleChange(val) {
       this.goods.category_id = val

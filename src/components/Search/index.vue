@@ -28,6 +28,17 @@
           />
         </el-select>
       </el-col>
+      <el-col :span="5">
+        <el-select
+          v-model="sort"
+          placeholder="排序"
+          style="width:200px; margin-left:10px"
+          class="filter-item"
+        >
+          <el-option label="倒序" value="desc" />
+          <el-option label="正序" value="asc" />
+        </el-select>
+      </el-col>
       <el-col :span="9">
         <div class="date-wrap filter-item" :class="{ dateHidden: dateHidden}">
           <el-col :span="11" :offset="0">
@@ -50,6 +61,8 @@
           </el-col>
         </div>
       </el-col>
+    </el-row>
+    <el-row style="margin-bottom: 10px;margin-top: 10px;">
       <el-col :span="5">
         <el-button
           class="filter-item"
@@ -103,6 +116,10 @@ export default {
     statusList: {
       type: Array,
       default: Array
+    },
+    exportModel: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -110,20 +127,22 @@ export default {
       search_value: '',
       status: null,
       startTime: '',
-      endTime: ''
+      endTime: '',
+      sort: 'desc'
     }
   },
   computed: {
   },
   methods: {
     handleFilter() {
-      this.$emit('search', { search_value: this.search_value, status: this.status, start_time: this.startTime, end_time: this.endTime })
+      this.$emit('search', { search_value: this.search_value, status: this.status, start_time: this.startTime, end_time: this.endTime, sort: this.sort })
     },
     handleCreate() {
       this.$emit('create')
     },
     handleDownload() {
-      this.$emit('export')
+      // this.$emit('export')
+      window.open('https://api.caidan888.com/admin/v1/export/excel?model=' + this.exportModel)
     }
   }
 }

@@ -2,6 +2,8 @@
   <div class="app-container">
     <search
       :status-hidden="true"
+      :export-hidden="false"
+      :export-model="'goods'"
       @search="fetchData"
     />
     <el-row>
@@ -45,6 +47,11 @@
       <el-table-column label="原价">
         <template slot-scope="scope">
           {{ scope.row.raw_price }}
+        </template>
+      </el-table-column>
+      <el-table-column label="成本价">
+        <template slot-scope="scope">
+          {{ scope.row.low_price }}
         </template>
       </el-table-column>
       <el-table-column label="中奖价">
@@ -103,11 +110,11 @@
                 :on-success="handleAvatarSuccess"
                 :headers="headers"
               >
-                <img v-if="goods.main_img" :src="goods.main_img" class="avatar">
+                <img v-if="goods.main_img" :src="goods.main_img" class="avatar" style="width: 100px;height: 100px;">
                 <i v-else class="el-icon-plus avatar-uploader-icon" />
               </el-upload>
               <div class="text-center" style="margin-top:10px">
-                上传奖品封面图(像素:651 x 651)
+                上传奖品方块图(像素:200 x 200)
               </div>
             </div>
           </el-col>
@@ -127,7 +134,7 @@
                 <i class="el-icon-plus" />
               </el-upload>
               <div class="text-center" style="margin-top:10px">
-                上传奖品图组(像素:651 x 651)<br>
+                上传奖品轮播图(像素:630 x 355)<br>
               </div>
             </div>
           </el-col>
@@ -151,16 +158,26 @@
           </el-col>
         </el-row>
         <el-row style="margin-bottom: 20px">
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="奖品原价" :label-width="formLabelWidth">
               <el-input-number v-model="goods.raw_price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="中奖价" :label-width="formLabelWidth">
               <el-input-number v-model="goods.price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />
             </el-form-item>
           </el-col>
+          <el-col :span="8">
+            <el-form-item label="成本价" :label-width="formLabelWidth">
+              <el-input-number v-model="goods.low_price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-form-item label="描述">
+            <el-input v-model="goods.desc" type="textarea" />
+          </el-form-item>
         </el-row>
         <el-row style="margin-bottom: 20px">
           <el-col :span="24">
@@ -177,7 +194,7 @@
                 <i class="el-icon-plus" />
               </el-upload>
               <div class="text-center" style="margin-top:10px">
-                上传奖品详情图组(像素:651 x 651)<br>
+                上传奖品详情图组(像素:690 x N)<br>
               </div>
             </div>
           </el-col>
@@ -267,7 +284,9 @@ export default {
         info_upload_ids: '',
         main_img: '',
         introduction_imgs: [],
-        info_imgs: []
+        info_imgs: [],
+        low_price: '0.00',
+        desc: ''
       },
       tag: '',
       formLabelWidth: '120px'
@@ -326,7 +345,9 @@ export default {
         is_free_shipping: 0,
         main_img: '',
         introduction_imgs: [],
-        info_imgs: []
+        info_imgs: [],
+        low_price: '0.00',
+        desc: ''
       }
       this.dialogFormVisible = true
       this.dialogStatus = 'create'

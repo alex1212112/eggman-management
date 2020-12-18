@@ -3,6 +3,8 @@
     <search
       :status-hidden="false"
       :status-list="statusList"
+      :export-hidden="false"
+      :export-model="'userCash'"
       @search="fetchData"
     />
     <el-table

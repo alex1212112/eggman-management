@@ -3,7 +3,8 @@
     <search
       :status-hidden="false"
       :status-list="statusList"
-      :search-hidden="true"
+      :export-hidden="false"
+      :export-model="'luckyDraw'"
       @search="fetchData"
     />
     <el-table
@@ -22,6 +23,11 @@
       <el-table-column align="center" label="抽奖ID" width="95">
         <template slot-scope="scope">
           {{ scope.row.lucky_id }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="抽奖编号" width="180">
+        <template slot-scope="scope">
+          {{ scope.row.lucky_draw_no }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="开始时间" width="180">
