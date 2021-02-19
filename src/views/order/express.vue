@@ -53,6 +53,16 @@
           {{ scope.row.amount }}
         </template>
       </el-table-column>
+      <el-table-column align="center" label="开奖编号" width="180">
+        <template slot-scope="scope">
+          {{ scope.row.lucky_draw_no }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="商品名称" width="180">
+        <template slot-scope="scope">
+          {{ scope.row.goods_name }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="收货人" width="180">
         <template slot-scope="scope">
           <div v-if="scope.row.phone">
