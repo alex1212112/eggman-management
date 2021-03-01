@@ -16,7 +16,7 @@
           icon="el-icon-plus"
           @click="handlerCreate"
         >
-          添加奖品
+          添加商品
         </el-button>
       </el-col>
     </el-row>
@@ -34,29 +34,34 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="奖品名称">
+      <el-table-column label="商品名称">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="奖品分类">
+      <el-table-column label="商品分类">
         <template slot-scope="scope">
           {{ scope.row.category_name }}
         </template>
       </el-table-column>
-      <!--      <el-table-column label="原价">-->
-      <!--        <template slot-scope="scope">-->
-      <!--          {{ scope.row.raw_price }}-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
       <el-table-column label="成本价">
         <template slot-scope="scope">
           {{ scope.row.low_price }}
         </template>
       </el-table-column>
-      <el-table-column label="销售价">
+      <el-table-column label="原价">
+        <template slot-scope="scope">
+          {{ scope.row.raw_price }}
+        </template>
+      </el-table-column>
+      <el-table-column label="现价">
         <template slot-scope="scope">
           {{ scope.row.price }}
+        </template>
+      </el-table-column>
+      <el-table-column label="蛋壳价">
+        <template slot-scope="scope">
+          {{ scope.row.egg_price }}
         </template>
       </el-table-column>
       <!--<el-table-column class-name="status-col" label="状态" width="110" align="center">-->
@@ -90,7 +95,7 @@
     />
 
     <el-dialog
-      :title="dialogStatus === 'create' ? '添加奖品' : '编辑奖品'"
+      :title="dialogStatus === 'create' ? '添加商品' : '编辑商品'"
       :visible.sync="dialogFormVisible"
       width="80%"
       @close="cancel"
@@ -114,7 +119,7 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon" />
               </el-upload>
               <div class="text-center" style="margin-top:10px">
-                上传奖品方块图(像素:200 x 200)
+                上传商品方块图(像素:200 x 200)
               </div>
             </div>
           </el-col>
@@ -134,21 +139,21 @@
                 <i class="el-icon-plus" />
               </el-upload>
               <div class="text-center" style="margin-top:10px">
-                上传奖品轮播图(像素:630 x 355)<br>
+                上传商品轮播图(像素:630 x 355)<br>
               </div>
             </div>
           </el-col>
         </el-row>
         <el-row style="margin-bottom: 20px">
           <el-col :span="12">
-            <el-form-item label="奖品名称" :label-width="formLabelWidth">
+            <el-form-item label="商品名称" :label-width="formLabelWidth">
               <el-input v-model="goods.name" autocomplete="off" style="width: 195px;" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="选择奖品分类" :label-width="formLabelWidth">
+            <el-form-item label="选择商品分类" :label-width="formLabelWidth">
               <el-cascader
-                v-model="goods.category_id"
+                v-model="goods.mall_category_id"
                 :options="options"
                 :props="{ expandTrigger: 'hover',value: 'id', label: 'name', checkStrictly: true,emitPath: false }"
                 size="medium"
@@ -158,19 +163,26 @@
           </el-col>
         </el-row>
         <el-row style="margin-bottom: 20px">
-          <!--          <el-col :span="8">-->
-          <!--            <el-form-item label="奖品原价" :label-width="formLabelWidth">-->
-          <!--              <el-input-number v-model="goods.raw_price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />-->
-          <!--            </el-form-item>-->
-          <!--          </el-col>-->
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="成本价" :label-width="formLabelWidth">
               <el-input-number v-model="goods.low_price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="销售价" :label-width="formLabelWidth">
+          <el-col :span="12">
+            <el-form-item label="商品原价" :label-width="formLabelWidth">
+              <el-input-number v-model="goods.raw_price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row style="margin-bottom: 20px">
+          <el-col :span="12">
+            <el-form-item label="现价" :label-width="formLabelWidth">
               <el-input-number v-model="goods.price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="蛋壳价" :label-width="formLabelWidth">
+              <el-input-number v-model="goods.egg_price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -194,7 +206,7 @@
                 <i class="el-icon-plus" />
               </el-upload>
               <div class="text-center" style="margin-top:10px">
-                上传奖品详情图组(像素:690 x N)<br>
+                上传商品详情图组(像素:690 x N)<br>
               </div>
             </div>
           </el-col>
@@ -235,14 +247,14 @@
 </template>
 
 <script>
-import { getList, postAdd, putEdit, delItem } from '@/api/goods'
-import { getList as categoryGetList } from '@/api/goodsCategory'
+import { getList, postAdd, putEdit, delItem } from '@/api/mallGoods'
+import { getList as categoryGetList } from '@/api/mallCategory'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import Search from '@/components/Search'
 import { getToken } from '@/utils/auth'
 
 export default {
-  name: 'Goods',
+  // name: 'Goods',
   components: { Pagination, Search },
   props: {
     isSelect: {
@@ -276,9 +288,10 @@ export default {
       goods: {
         id: 0,
         name: '',
-        category_id: 0,
+        mall_category_id: 0,
         raw_price: '0.00',
         price: '0.00',
+        egg_price: '0.00',
         main_upload_id: 0,
         introduction_upload_ids: '',
         info_upload_ids: '',
@@ -336,9 +349,10 @@ export default {
       this.goods = {
         id: 0,
         name: '',
-        category_id: 0,
+        mall_category_id: 0,
         raw_price: '0.00',
         price: '0.00',
+        egg_price: '0.00',
         main_upload_id: 0,
         introduction_upload_ids: '',
         info_upload_ids: '',
@@ -409,7 +423,7 @@ export default {
       this.goods.main_upload_id = res.data.id
     },
     handleChange(val) {
-      this.goods.category_id = val
+      this.goods.mall_category_id = val
     },
     imgArrAdd(res, file) {
       if (res.code === 200) {

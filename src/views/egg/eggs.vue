@@ -3,7 +3,7 @@
     <search
       :status-hidden="true"
       :export-hidden="false"
-      :export-model="'goods'"
+      :export-model="'eggs'"
       @search="fetchData"
     />
     <el-row>
@@ -16,7 +16,7 @@
           icon="el-icon-plus"
           @click="handlerCreate"
         >
-          添加奖品
+          添加彩蛋
         </el-button>
       </el-col>
     </el-row>
@@ -34,29 +34,29 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="奖品名称">
+      <el-table-column label="彩蛋名称">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="奖品分类">
+      <el-table-column label="彩蛋价值(元)">
         <template slot-scope="scope">
-          {{ scope.row.category_name }}
+          {{ scope.row.value }}
         </template>
       </el-table-column>
-      <!--      <el-table-column label="原价">-->
-      <!--        <template slot-scope="scope">-->
-      <!--          {{ scope.row.raw_price }}-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
-      <el-table-column label="成本价">
+      <el-table-column label="兑换要求(个)">
         <template slot-scope="scope">
-          {{ scope.row.low_price }}
+          {{ scope.row.requirement }}
         </template>
       </el-table-column>
-      <el-table-column label="销售价">
+      <el-table-column label="收集周期(天)">
         <template slot-scope="scope">
-          {{ scope.row.price }}
+          {{ scope.row.days }}
+        </template>
+      </el-table-column>
+      <el-table-column label="关联抽奖(ID)">
+        <template slot-scope="scope">
+          {{ scope.row.lucky_two_ids }}
         </template>
       </el-table-column>
       <!--<el-table-column class-name="status-col" label="状态" width="110" align="center">-->
@@ -73,6 +73,7 @@
       <el-table-column v-if="!isSelect" align="center" label="操作" width="200">
         <template slot-scope="scope">
           <div class="operation-buttons">
+            <el-button type="warning" size="small" @click="details(scope.row, scope.$index)">关联详情</el-button>
             <el-button type="primary" @click="edit(scope.row, scope.$index)">编辑</el-button>
             <el-button type="danger" @click="del(scope.row, scope.$index)">删除</el-button>
           </div>
@@ -90,70 +91,18 @@
     />
 
     <el-dialog
-      :title="dialogStatus === 'create' ? '添加奖品' : '编辑奖品'"
+      :title="dialogStatus === 'create' ? '添加彩蛋' : '编辑彩蛋'"
       :visible.sync="dialogFormVisible"
       width="80%"
       @close="cancel"
     >
       <el-form
-        :model="goods"
+        :model="eggs"
       >
         <el-row style="margin-bottom: 20px">
-          <el-col :span="24">
-            <div class="box-center">
-              <el-upload
-                ref="upload"
-                :action="uploadApi"
-                class="avatar-uploader tex-center"
-                name="file"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :headers="headers"
-              >
-                <img v-if="goods.main_img" :src="goods.main_img" class="avatar" style="width: 100px;height: 100px;">
-                <i v-else class="el-icon-plus avatar-uploader-icon" />
-              </el-upload>
-              <div class="text-center" style="margin-top:10px">
-                上传奖品方块图(像素:200 x 200)
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row style="margin-bottom: 20px">
-          <el-col :span="24">
-            <div class="box-center">
-              <el-upload
-                :action="uploadApi"
-                list-type="picture-card"
-                :on-success="imgArrAdd"
-                :on-remove="imgArrRemove"
-                :file-list="goods.introduction_imgs"
-                :headers="headers"
-                :multiple="true"
-              >
-                <i class="el-icon-plus" />
-              </el-upload>
-              <div class="text-center" style="margin-top:10px">
-                上传奖品轮播图(像素:630 x 355)<br>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row style="margin-bottom: 20px">
           <el-col :span="12">
-            <el-form-item label="奖品名称" :label-width="formLabelWidth">
-              <el-input v-model="goods.name" autocomplete="off" style="width: 195px;" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="选择奖品分类" :label-width="formLabelWidth">
-              <el-cascader
-                v-model="goods.category_id"
-                :options="options"
-                :props="{ expandTrigger: 'hover',value: 'id', label: 'name', checkStrictly: true,emitPath: false }"
-                size="medium"
-                @change="handleChange"
-              />
+            <el-form-item label="彩蛋名称" :label-width="formLabelWidth">
+              <el-input v-model="eggs.name" autocomplete="off" style="width: 195px;" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -163,47 +112,38 @@
           <!--              <el-input-number v-model="goods.raw_price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />-->
           <!--            </el-form-item>-->
           <!--          </el-col>-->
-          <el-col :span="8">
-            <el-form-item label="成本价" :label-width="formLabelWidth">
-              <el-input-number v-model="goods.low_price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />
+          <el-col :span="12">
+            <el-form-item label="彩蛋价值(元)" :label-width="formLabelWidth">
+              <el-input-number v-model="eggs.value" :precision="2" :step="1" :min="0.00" style="width: 195px;" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="销售价" :label-width="formLabelWidth">
-              <el-input-number v-model="goods.price" :precision="2" :step="1" :min="0.00" style="width: 195px;" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item label="描述">
-            <el-input v-model="goods.desc" type="textarea" />
-          </el-form-item>
         </el-row>
         <el-row style="margin-bottom: 20px">
-          <el-col :span="24">
-            <div class="box-center">
-              <el-upload
-                :action="uploadApi"
-                list-type="picture-card"
-                :on-success="imgArrAddInfo"
-                :on-remove="imgArrRemoveInfo"
-                :file-list="goods.info_imgs"
-                :headers="headers"
-                :multiple="true"
-              >
-                <i class="el-icon-plus" />
-              </el-upload>
-              <div class="text-center" style="margin-top:10px">
-                上传奖品详情图组(像素:690 x N)<br>
-              </div>
-            </div>
+          <el-col :span="12">
+            <el-form-item label="兑换要求(个)" :label-width="formLabelWidth">
+              <el-input-number v-model="eggs.requirement" :precision="0" :step="1" :min="0" style="width: 195px;" />
+            </el-form-item>
           </el-col>
         </el-row>
-
-        <!--<el-form-item label="商户LOGO" :label-width="formLabelWidth">-->
-        <!--<el-input v-model="seller.logo" autocomplete="off"></el-input>-->
-        <!--</el-form-item>-->
-
+        <el-row style="margin-bottom: 20px">
+          <el-col :span="12">
+            <el-form-item label="收集周期(天)" :label-width="formLabelWidth">
+              <el-input-number v-model="eggs.days" :precision="0" :step="1" :min="0" style="width: 195px;" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row style="margin-bottom: 20px">
+          <el-col :span="12">
+            <el-form-item label="保底参与(次)" :label-width="formLabelWidth">
+              <el-input-number v-model="eggs.min_count" :precision="0" :step="1" :min="0" style="width: 195px;" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row style="margin-bottom: 20px">
+          <el-form-item label="备注" :label-width="formLabelWidth">
+            <el-input v-model="eggs.desc" type="textarea" />
+          </el-form-item>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
@@ -230,20 +170,33 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="关联详情"
+      :visible.sync="dialogDetailLuckyTwo"
+      class="text-center"
+      center
+      width="90%"
+    >
+      <manage-two
+        ref="luckyTwoCom"
+        :is-select="true"
+      />
+    </el-dialog>
   </div>
 
 </template>
 
 <script>
-import { getList, postAdd, putEdit, delItem } from '@/api/goods'
-import { getList as categoryGetList } from '@/api/goodsCategory'
+import { getList, postAdd, putEdit, delItem } from '@/api/eggs'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import Search from '@/components/Search'
 import { getToken } from '@/utils/auth'
+import ManageTwo from '@/views/luckyDraw/manage2'
 
 export default {
-  name: 'Goods',
-  components: { Pagination, Search },
+  name: 'Eggs',
+  components: { Pagination, Search, ManageTwo },
   props: {
     isSelect: {
       type: Boolean,
@@ -272,20 +225,15 @@ export default {
       dialogFormVisible: false,
       dialogHintVisible: false,
       dialogVisible: false,
+      dialogDetailLuckyTwo: false,
       dialogStatus: 'create',
-      goods: {
+      eggs: {
         id: 0,
         name: '',
-        category_id: 0,
-        raw_price: '0.00',
-        price: '0.00',
-        main_upload_id: 0,
-        introduction_upload_ids: '',
-        info_upload_ids: '',
-        main_img: '',
-        introduction_imgs: [],
-        info_imgs: [],
-        low_price: '0.00',
+        value: '0.00',
+        requirement: 0,
+        days: 0,
+        min_count: 0,
         desc: ''
       },
       tag: '',
@@ -327,41 +275,22 @@ export default {
       console.log(this.listQuery)
       this.getList()
     },
-    fetchCategories() {
-      categoryGetList().then(res => {
-        this.options = res.data
-      })
-    },
     handlerCreate() {
-      this.goods = {
+      this.eggs = {
         id: 0,
         name: '',
-        category_id: 0,
-        raw_price: '0.00',
-        price: '0.00',
-        main_upload_id: 0,
-        introduction_upload_ids: '',
-        info_upload_ids: '',
-        is_free_shipping: 0,
-        main_img: '',
-        introduction_imgs: [],
-        info_imgs: [],
-        low_price: '0.00',
+        value: '0.00',
+        requirement: 0,
+        days: 0,
+        min_count: 0,
         desc: ''
       }
       this.dialogFormVisible = true
       this.dialogStatus = 'create'
-      this.fetchCategories()
     },
     createData() {
-      this.goods.introduction_imgs = this.goods.introduction_imgs.map(img => {
-        return img.upload_id
-      })
-      this.goods.info_imgs = this.goods.info_imgs.map(img => {
-        return img.upload_id
-      })
-      console.log(this.goods)
-      postAdd(this.goods).then(res => {
+      console.log(this.eggs)
+      postAdd(this.eggs).then(res => {
         if (res.code === 200) {
           this.dialogFormVisible = false
           this.getList()
@@ -373,21 +302,14 @@ export default {
       this.dialogFormVisible = true
       this.dialogStatus = 'update'
 
-      this.goods = item
-      this.fetchCategories()
+      this.eggs = item
     },
     del(item, _index) {
       this.dialogHintVisible = true
-      this.goods = item
+      this.eggs = item
     },
     updateData() {
-      this.goods.introduction_imgs = this.goods.introduction_imgs.map(img => {
-        return img.upload_id
-      })
-      this.goods.info_imgs = this.goods.info_imgs.map(img => {
-        return img.upload_id
-      })
-      putEdit(this.goods).then(res => {
+      putEdit(this.eggs).then(res => {
         if (res.code === 200) {
           this.dialogFormVisible = false
           this.getList()
@@ -395,7 +317,7 @@ export default {
       })
     },
     delData() {
-      delItem(this.goods).then(res => {
+      delItem(this.eggs).then(res => {
         if (res.code === 200) {
           this.dialogHintVisible = false
           this.getList()
@@ -441,6 +363,12 @@ export default {
     },
     selectCurrentRow(row) {
       this.$emit('select', row)
+    },
+    details(row, index) {
+      this.dialogDetailLuckyTwo = true
+      this.$nextTick(() => {
+        this.$refs.luckyTwoCom.loadData(row.id)
+      })
     },
     loadData() {
       this.getList()
