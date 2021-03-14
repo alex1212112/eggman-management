@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import LayoutChild from '@/layout/child'
 // import Emplayout from '@/emplayout'
 
 /* Router Modules */
@@ -147,31 +148,18 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  // {
-  //   path: '/draw',
-  //   component: Layout,
-  //   redirect: '/draw/index',
-  //   name: '抽奖后台',
-  //   meta: {
-  //     title: '抽奖后台',
-  //     icon: 'lock'
-  //   },
-  //   children: [
-  //
-  //   ]
-  // },
   {
-    path: '/setting_system',
+    path: '/settingSystem',
     component: Layout,
-    redirect: '/setting',
-    name: '系统设置',
+    redirect: '/settingSystem/index',
+    name: '系统管理',
     meta: {
-      title: '系统设置',
+      title: '系统管理',
       icon: 'lock'
     },
     children: [
       {
-        path: '/setting',
+        path: 'index',
         component: () => import('@/views/setting/index'),
         name: '系统设置',
         meta: {
@@ -181,101 +169,9 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/goods',
-    component: Layout,
-    redirect: '/goods/category',
-    name: '奖品管理',
-    meta: {
-      title: '奖品管理',
-      icon: 'lock'
-    },
-    children: [
-      {
-        path: 'category',
-        component: () => import('@/views/goods/category'),
-        name: '奖品分类',
-        meta: {
-          title: '奖品分类'
-        }
-      },
-      {
-        path: 'goods',
-        component: () => import('@/views/goods/goods'),
-        name: '奖品列表',
-        meta: {
-          title: '奖品列表'
-        }
-      }
-    ]
-  },
-  // {
-  //   path: '/task',
-  //   component: Layout,
-  //   redirect: '/taskList',
-  //   name: '每日任务',
-  //   meta: {
-  //     title: '每日任务',
-  //     icon: 'lock'
-  //   },
-  //   children: [
-  //     {
-  //       path: '/taskList',
-  //       component: () => import('@/views/other/task'),
-  //       name: '每日任务',
-  //       meta: {
-  //         title: '每日任务'
-  //       }
-  //     }
-  //   ]
-  // },
-  {
-    path: '/lucky',
-    component: Layout,
-    redirect: '/luck',
-    name: '抽奖管理',
-    meta: {
-      title: '抽奖管理',
-      icon: 'lock'
-    },
-    children: [
-      // {
-      //   path: '/manage',
-      //   component: () => import('@/views/luckyDraw/manage'),
-      //   name: '抽奖设置',
-      //   meta: {
-      //     title: '抽奖设置'
-      //   }
-      // },
-      {
-        path: '/manage',
-        component: () => import('@/views/luckyDraw/manage2'),
-        name: '抽奖设置',
-        meta: {
-          title: '抽奖设置'
-        }
-      },
-      {
-        path: '/week',
-        component: () => import('@/views/luckyDraw/week'),
-        name: '每周抽奖',
-        meta: {
-          title: '每周抽奖'
-        }
-      },
-      {
-        path: '/draw',
-        component: () => import('@/views/luckyDraw/draw2'),
-        name: '开奖记录',
-        meta: {
-          title: '开奖记录'
-        }
-      }
-    ]
-  },
-  {
     path: '/userManage',
     component: Layout,
-    redirect: '/user',
+    redirect: '/userManage/user',
     name: '用户管理',
     meta: {
       title: '用户管理',
@@ -283,7 +179,7 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: '/user',
+        path: 'user',
         component: () => import('@/views/user/user'),
         name: '用户管理',
         meta: {
@@ -293,45 +189,25 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/order',
+    path: '/finance',
     component: Layout,
-    redirect: '/order',
-    name: '订单管理',
+    redirect: '/finance/log',
+    name: '财务管理',
     meta: {
-      title: '订单管理',
+      title: '财务管理',
       icon: 'lock'
     },
     children: [
       {
-        path: '/express',
-        component: () => import('@/views/order/express'),
-        name: '快递订单',
+        path: 'log',
+        component: () => import('@/views/other/log'),
+        name: '用户流水',
         meta: {
-          title: '快递订单'
+          title: '用户流水'
         }
       },
       {
-        path: '/pay',
-        component: () => import('@/views/order/pay'),
-        name: '支付订单',
-        meta: {
-          title: '支付订单'
-        }
-      }
-    ]
-  },
-  {
-    path: '/cash',
-    component: Layout,
-    redirect: '/cash',
-    name: '用户提现',
-    meta: {
-      title: '用户提现',
-      icon: 'lock'
-    },
-    children: [
-      {
-        path: '/cashList',
+        path: 'cash',
         component: () => import('@/views/other/cash'),
         name: '用户提现',
         meta: {
@@ -341,57 +217,141 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/log',
+    path: '/luckyAdmin',
     component: Layout,
-    redirect: '/log',
-    name: '财务统计',
+    redirect: '/luckyAdmin/goods/category',
+    name: '抽奖后台',
     meta: {
-      title: '财务统计',
+      title: '抽奖后台',
       icon: 'lock'
     },
     children: [
       {
-        path: '/logList',
-        component: () => import('@/views/other/log'),
-        name: '财务统计',
+        path: 'goods',
+        component: LayoutChild,
+        redirect: '/luckyAdmin/goods/category',
+        name: '奖品管理',
         meta: {
-          title: '财务统计'
-        }
-      }
-    ]
-  },
-  {
-    path: '/egg',
-    component: Layout,
-    redirect: '/index',
-    name: '彩蛋管理',
-    meta: {
-      title: '彩蛋管理',
-      icon: 'lock'
-    },
-    children: [
-      {
-        path: '/egg/list',
-        component: () => import('@/views/egg/eggs'),
-        name: '彩蛋列表',
-        meta: {
-          title: '彩蛋列表'
-        }
+          title: '奖品管理',
+          icon: 'lock'
+        },
+        children: [
+          {
+            path: 'category',
+            component: () => import('@/views/goods/category'),
+            name: '奖品分类',
+            meta: {
+              title: '奖品分类'
+            }
+          },
+          {
+            path: 'goods',
+            component: () => import('@/views/goods/goods'),
+            name: '奖品列表',
+            meta: {
+              title: '奖品列表'
+            }
+          }
+        ]
       },
       {
-        path: '/egg/log',
-        component: () => import('@/views/egg/log'),
-        name: '彩蛋记录',
+        path: 'lucky',
+        component: LayoutChild,
+        redirect: '/luckyAdmin/luck/manage',
+        name: '抽奖管理',
         meta: {
-          title: '彩蛋记录'
-        }
+          title: '抽奖管理',
+          icon: 'lock'
+        },
+        children: [
+          {
+            path: 'manage',
+            component: () => import('@/views/luckyDraw/manage2'),
+            name: '抽奖设置',
+            meta: {
+              title: '抽奖设置'
+            }
+          },
+          {
+            path: 'week',
+            component: () => import('@/views/luckyDraw/week'),
+            name: '每周抽奖',
+            meta: {
+              title: '每周抽奖'
+            }
+          },
+          {
+            path: 'draw',
+            component: () => import('@/views/luckyDraw/draw2'),
+            name: '开奖记录',
+            meta: {
+              title: '开奖记录'
+            }
+          }
+        ]
+      },
+      {
+        path: 'egg',
+        component: LayoutChild,
+        redirect: '/luckyAdmin/egg/list',
+        name: '彩蛋管理',
+        meta: {
+          title: '彩蛋管理',
+          icon: 'lock'
+        },
+        children: [
+          {
+            path: 'list',
+            component: () => import('@/views/egg/eggs'),
+            name: '彩蛋列表',
+            meta: {
+              title: '彩蛋列表'
+            }
+          },
+          {
+            path: 'log',
+            component: () => import('@/views/egg/log'),
+            name: '彩蛋记录',
+            meta: {
+              title: '彩蛋记录'
+            }
+          }
+        ]
+      },
+      {
+        path: 'order',
+        component: LayoutChild,
+        redirect: '/luckyAdmin/order/express',
+        name: '订单管理',
+        meta: {
+          title: '订单管理',
+          icon: 'lock'
+        },
+        children: [
+          {
+            path: 'express',
+            component: () => import('@/views/order/express'),
+            name: '快递订单',
+            meta: {
+              title: '快递订单'
+            }
+          },
+          {
+            path: 'pay',
+            component: () => import('@/views/order/pay'),
+            name: '支付订单',
+            meta: {
+              title: '支付订单'
+            }
+          }
+        ]
       }
     ]
   },
   {
     path: '/mall',
     component: Layout,
-    redirect: '/mall/index',
+    redirect: '/mall/category',
     name: '商城后台',
     meta: {
       title: '商城后台',
@@ -427,7 +387,7 @@ export const asyncRoutes = [
   {
     path: '/vip',
     component: Layout,
-    redirect: '/vip/index',
+    redirect: '/vip/vip',
     name: '会员后台',
     meta: {
       title: '会员后台',
@@ -435,7 +395,7 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: '/vip/vip',
+        path: 'vip',
         component: () => import('@/views/vip/vip'),
         name: 'VIP设置',
         meta: {
@@ -443,7 +403,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '/vip/svip',
+        path: 'svip',
         component: () => import('@/views/vip/svip'),
         name: 'SVIP设置',
         meta: {
@@ -451,7 +411,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '/vip/agent',
+        path: 'agent',
         component: () => import('@/views/vip/agent'),
         name: '区域代理',
         meta: {
