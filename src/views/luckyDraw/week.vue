@@ -48,6 +48,16 @@
           {{ scope.row.name }}
         </template>
       </el-table-column>
+      <el-table-column label="特等奖红包" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.fest_bonus }}
+        </template>
+      </el-table-column>
+      <el-table-column label="一等奖红包" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.first_bonus }}
+        </template>
+      </el-table-column>
       <el-table-column label="二等奖奖品名称" align="center">
         <template slot-scope="scope">
           {{ scope.row.second_goods.name }}
@@ -58,24 +68,14 @@
           {{ scope.row.third_goods.name }}
         </template>
       </el-table-column>
-      <el-table-column label="彩蛋名称" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.eggs.name }}
-        </template>
-      </el-table-column>
       <el-table-column label="保证金" align="center">
         <template slot-scope="scope">
           {{ scope.row.amount }}
         </template>
       </el-table-column>
-      <el-table-column label="红包金额" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.first_bonus }}
-        </template>
-      </el-table-column>
       <el-table-column label="抽奖人数" align="center">
         <template slot-scope="scope">
-          {{ scope.row.first_count }}/{{ scope.row.second_count }}/{{ scope.row.third_count }}
+          {{ scope.row.fest_count }}/{{ scope.row.first_count }}/{{ scope.row.second_count }}/{{ scope.row.third_count }}
         </template>
       </el-table-column>
       <el-table-column label="已开次数" align="center">
@@ -188,6 +188,21 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-divider content-position="center">特等奖设置</el-divider>
+        <el-row style="margin-top: 20px">
+          <el-col :span="24">
+            <el-form-item label="特等奖中奖人数" :label-width="formLabelWidth">
+              <el-input-number v-model="lucky.fest_count" autocomplete="off" style="width: 195px;" :min="0" :step="1" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="特等奖现金红包" :label-width="formLabelWidth">
+              <el-input-number v-model="lucky.fest_bonus" autocomplete="off" style="width: 195px;" :min="0" :step="1" :precision="2" />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-divider content-position="center">一等奖设置</el-divider>
         <el-row style="margin-top: 20px">
           <el-col :span="24">
@@ -260,45 +275,6 @@
           </el-col>
         </el-row>
         <el-divider content-position="center">基础设置</el-divider>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="可参与时间段" :label-width="formLabelWidth">
-              <el-button type="primary" icon="el-icon-plus" @click="addTimeParts" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="" :label-width="formLabelWidth">
-              <div v-for="(item,index) in lucky.time_parts" :key="index">
-                <el-time-picker
-                  v-model="item.part"
-                  is-range
-                  value-format="HH:mm:ss"
-                  range-separator="-"
-                  start-placeholder="开始时间"
-                  end-placeholder="结束时间"
-                  placeholder="选择时间范围"
-                  style="margin-top:3px;"
-                  @change="pickTimeParts"
-                />
-                <el-button style="margin-left: 5px" type="primary" icon="el-icon-delete" @click="subTimeParts(index)" />
-              </div>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row style="margin-bottom: 20px">
-          <el-col :span="24">
-            <!--              <img v-if="lucky.main_img" :src="lucky.main_img" class="avatar">-->
-            <el-button type="success" @click="selectEggs">选择彩蛋</el-button>
-          </el-col>
-        </el-row>
-        <el-row v-if="lucky.eggs.id" style="margin-bottom: 20px">
-          <el-col :span="24">
-            <el-tag type="">{{ lucky.eggs.name }}</el-tag>
-            <el-tag type="success">{{ lucky.eggs.value }}</el-tag>
-          </el-col>
-        </el-row>
         <el-row style="margin-bottom: 20px">
           <el-col :span="24">
             <el-form-item label="抽奖轮数" :label-width="formLabelWidth">
@@ -411,12 +387,12 @@
 </template>
 
 <script>
-import { getList, postAdd, putEdit, postOnline, postDown, postPause, postReplay } from '@/api/luckyTwo'
+import { getList, postAdd, putEdit, postOnline, postDown, postPause, postReplay } from '@/api/week'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import Search from '@/components/Search'
 import Goods from '@/views/goods/goods'
 import Eggs from '@/views/egg/eggs'
-import Draw from '@/views/luckyDraw/draw2'
+import Draw from '@/views/luckyDraw/draw'
 import { getToken } from '@/utils/auth'
 
 export default {
@@ -461,6 +437,8 @@ export default {
       lucky: {
         name: '',
         amount: '0.00',
+        fest_count: 0,
+        fest_bonus: '0.00',
         first_count: 0,
         first_bonus: '0.00',
         second_count: 0,
@@ -471,9 +449,6 @@ export default {
         third_price: '0.00',
         third_goods_id: 0,
         third_goods: {},
-        eggs_id: 0,
-        eggs: {},
-        time_parts: [],
         repeat: 0,
         online_at: '',
         desc: ''
@@ -531,6 +506,8 @@ export default {
       this.lucky = {
         name: '',
         amount: '0.00',
+        fest_count: 0,
+        fest_bonus: '0.00',
         first_count: 0,
         first_bonus: '0.00',
         second_count: 0,
@@ -541,9 +518,6 @@ export default {
         third_price: '0.00',
         third_goods_id: 0,
         third_goods: {},
-        eggs_id: 0,
-        eggs: {},
-        time_parts: [],
         repeat: 0,
         online_at: '',
         desc: ''

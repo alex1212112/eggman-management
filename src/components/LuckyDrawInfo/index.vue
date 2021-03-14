@@ -8,43 +8,49 @@
           </div>
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="抽奖 ID">
-              <span>{{ lucky_draw.lucky && lucky_draw.lucky_id }}</span>
-            </el-form-item>
-            <el-form-item label="每期时间">
-              <span>{{ lucky_draw.lucky && lucky_draw.lucky.minutes }} 分钟</span>
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two_id }}</span>
             </el-form-item>
             <el-form-item label="重复期数">
-              <span>{{ lucky_draw.lucky && lucky_draw.lucky.repeat }} 期</span>
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.repeat }} 期</span>
+            </el-form-item>
+            <el-form-item label="保证金">
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.amount }}</span>
             </el-form-item>
             <el-form-item label="开奖人数">
-              <span>{{ lucky_draw.lucky && lucky_draw.lucky.done_count }}</span>
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.count }}</span>
             </el-form-item>
-            <el-form-item label="中奖人数">
-              <span>{{ lucky_draw.lucky && lucky_draw.lucky.select_count }}</span>
+            <el-form-item label="一等奖人数">
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.first_count }}</span>
             </el-form-item>
-            <el-form-item label="未中奖人数">
-              <span>{{ lucky_draw.lucky && lucky_draw.lucky.no_select_count }}</span>
+            <el-form-item label="二等奖人数">
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.second_count }}</span>
             </el-form-item>
-            <el-form-item label="参与红包">
-              <span>{{ lucky_draw.lucky && lucky_draw.lucky.join_red_package }}</span>
+            <el-form-item label="三等奖人数">
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.third_count }}</span>
             </el-form-item>
-            <el-form-item label="拉新红包">
-              <span>{{ lucky_draw.lucky && lucky_draw.lucky.new_red_package }}</span>
+            <el-form-item label="一等奖红包">
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.first_bonus }}</span>
+            </el-form-item>
+            <el-form-item label="二等奖奖品">
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.second_goods.name }}</span>
+            </el-form-item>
+            <el-form-item label="二等奖金额">
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.second_price }}</span>
+            </el-form-item>
+            <el-form-item label="三等奖奖品">
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.third_goods.name }}</span>
+            </el-form-item>
+            <el-form-item label="三等奖金额">
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.third_price }}</span>
             </el-form-item>
             <el-form-item label="上线时间">
-              <span>{{ lucky_draw.lucky && lucky_draw.lucky.online_at }}</span>
+              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.online_at }}</span>
             </el-form-item>
             <el-form-item label="下线时间">
-              <span>{{ lucky_draw.lucky.down_at === null ? '未下线' : lucky_draw.lucky.down_at }}</span>
+              <span>{{ lucky_draw.lucky_two.down_at === null ? '未下线' : lucky_draw.lucky_two.down_at }}</span>
             </el-form-item>
             <el-form-item label="抽奖状态">
-              <span>{{ lucky_draw.lucky.status === 1 ? '待上线' : lucky_draw.lucky.status === 2 ? '进行中' : lucky_draw.lucky.status === 3 ? '已暂停' : lucky_draw.lucky.status === 4 ? '已下线' : '' }}</span>
-            </el-form-item>
-            <el-form-item label="商品名称">
-              <span>{{ lucky_draw.goods.name }}</span>
-            </el-form-item>
-            <el-form-item label="中奖价">
-              <span>{{ lucky_draw.lucky.price }}</span>
+              <span>{{ lucky_draw.lucky_two.status === 1 ? '待上线' : lucky_draw.lucky_two.status === 2 ? '进行中' : lucky_draw.lucky_two.status === 3 ? '已暂停' : lucky_draw.lucky_two.status === 4 ? '已下线' : '' }}</span>
             </el-form-item>
           </el-form>
         </el-card>
@@ -60,17 +66,17 @@
             <el-form-item label="开奖 ID">
               <span>{{ lucky_draw.id }}</span>
             </el-form-item>
+            <el-form-item label="开奖编号">
+              <span>{{ lucky_draw.lucky_draw_no }}</span>
+            </el-form-item>
             <el-form-item label="开始时间">
               <span>{{ lucky_draw.begin_at }}</span>
-            </el-form-item>
-            <el-form-item label="失败时间">
-              <span>{{ lucky_draw.end_at }}</span>
             </el-form-item>
             <el-form-item label="开奖时间">
               <span>{{ lucky_draw.open_at === null ? '未开奖' : lucky_draw.open_at }}</span>
             </el-form-item>
             <el-form-item label="开奖状态">
-              <span>{{ lucky_draw.status === 1 ? '进行中' : lucky_draw.status === 2 ? '开奖中' : lucky_draw.status === 3 ? '开奖成功' : lucky_draw.status === 4 ? '开奖失败' : '' }}</span>
+              <span>{{ lucky_draw.status === 1 ? '进行中' : lucky_draw.status === 2 ? '开奖中' : lucky_draw.status === 3 ? '开奖成功' : '' }}</span>
             </el-form-item>
           </el-form>
         </el-card>
@@ -80,11 +86,11 @@
       <el-col>
         <el-card class="box-card" style="margin-top: 10px;">
           <div slot="header" class="clearfix" style="text-align: center">
-            <el-tag type="danger" effect="dark">中奖信息</el-tag>
+            <el-tag type="danger" effect="dark">一等奖中奖信息</el-tag>
           </div>
           <el-table
             v-loading="selectListLoading"
-            :data="selectList"
+            :data="firstList"
             element-loading-text="Loading"
             border
             fit
@@ -100,23 +106,15 @@
                 <el-tag>{{ scope.row.user.nickname }}</el-tag><el-tag type="info">{{ scope.row.user.phone }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="不中奖权重" width="95">
+            <el-table-column align="center" label="中奖红包">
               <template slot-scope="scope">
-                {{ scope.row.not_hit_weight }}
+                {{ scope.row.first_bonus }}
               </template>
             </el-table-column>
-            <el-table-column align="center" label="物流订单">
+            <el-table-column align="center" label="领奖方式">
               <template slot-scope="scope">
-                订单状态 : {{ scope.row.express_order.status === 1 ? '待发货' : scope.row.express_order.status === 2 ? '待收货' : scope.row.express_order.status === 3 ? '已签收' : scope.row.express_order.status === 4 ? '已放弃' : scope.row.express_order.status === 5 ? '未完善' : '' }}<br>
-                订单编号 : {{ scope.row.express_order.order_no }}<br>
-                物流信息 : {{ scope.row.express_order.express_name }} - {{ scope.row.express_order.express_no }}<br>
-                收货地址 : {{ scope.row.express_order.province }}{{ scope.row.express_order.city }}{{ scope.row.express_order.county }}{{ scope.row.express_order.detail_address }}<br>
-                收货信息 : {{ scope.row.express_order.consignee }} | {{ scope.row.express_order.phone }}
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="订单时间">
-              <template slot-scope="scope">
-                {{ scope.row.express_order.created_at }}
+                <!--0未领奖 1红包奖 2领实物奖 3兑换蛋壳 4已放弃-->
+                {{ scope.row.status === 0 ? '未领奖' : scope.row.status === 1 ? '红包奖' : scope.row.status === 2 ? '领实物奖' : scope.row.status === 3 ? '兑换蛋壳' : scope.row.status === 4 ? '已放弃' : '' }}
               </template>
             </el-table-column>
             <el-table-column align="center" label="操作">
@@ -134,11 +132,11 @@
       <el-col>
         <el-card class="box-card" style="margin-top: 10px;">
           <div slot="header" class="clearfix" style="text-align: center">
-            <el-tag type="danger" effect="dark">未中奖信息</el-tag>
+            <el-tag type="danger" effect="dark">二等奖中奖信息</el-tag>
           </div>
           <el-table
             v-loading="noSelectListLoading"
-            :data="noSelectList"
+            :data="secondList"
             element-loading-text="Loading"
             border
             fit
@@ -154,19 +152,91 @@
                 <el-tag>{{ scope.row.user.nickname }}</el-tag><el-tag type="info">{{ scope.row.user.phone }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="不中奖权重" width="95">
+            <el-table-column align="center" label="二等奖奖品" width="95">
               <template slot-scope="scope">
-                {{ scope.row.not_hit_weight }}
+                {{ scope.row.second_goods.name }}
               </template>
             </el-table-column>
-            <el-table-column align="center" label="退款余额">
+            <el-table-column align="center" label="奖品中奖价" width="95">
               <template slot-scope="scope">
-                {{ scope.row.lucky.price }}
+                {{ scope.row.second_price }}
               </template>
             </el-table-column>
-            <el-table-column align="center" label="参与红包">
+            <el-table-column align="center" label="领奖方式">
               <template slot-scope="scope">
-                {{ scope.row.join_red_package }}
+                <!--0未领奖 1红包奖 2领实物奖 3兑换蛋壳 4已放弃-->
+                {{ scope.row.status === 0 ? '未领奖' : scope.row.status === 1 ? '红包奖' : scope.row.status === 2 ? '领实物奖' : scope.row.status === 3 ? '兑换蛋壳' : scope.row.status === 4 ? '已放弃' : '' }}
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="物流订单">
+              <template v-if="scope.row.express_order" slot-scope="scope">
+                订单状态 : {{ scope.row.express_order.status === 1 ? '待发货' : scope.row.express_order.status === 2 ? '待收货' : scope.row.express_order.status === 3 ? '已签收' : scope.row.express_order.status === 4 ? '已放弃' : scope.row.express_order.status === 5 ? '未完善' : '' }}<br>
+                订单编号 : {{ scope.row.express_order.order_no }}<br>
+                物流信息 : {{ scope.row.express_order.express_name }} - {{ scope.row.express_order.express_no }}<br>
+                收货地址 : {{ scope.row.express_order.province }}{{ scope.row.express_order.city }}{{ scope.row.express_order.county }}{{ scope.row.express_order.detail_address }}<br>
+                收货信息 : {{ scope.row.express_order.consignee }} | {{ scope.row.express_order.phone }}
+                订单时间 : {{ scope.row.express_order.created_at }}
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="操作">
+              <template slot-scope="scope">
+                <div class="operation-buttons">
+                  <el-button type="warning" size="small" @click="userInfo(scope.row, scope.$index)">用户详情</el-button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col>
+        <el-card class="box-card" style="margin-top: 10px;">
+          <div slot="header" class="clearfix" style="text-align: center">
+            <el-tag type="danger" effect="dark">三等奖中奖信息</el-tag>
+          </div>
+          <el-table
+            v-loading="noSelectListLoading"
+            :data="thirdList"
+            element-loading-text="Loading"
+            border
+            fit
+            highlight-current-row
+          >
+            <el-table-column align="center" label="头像" width="95">
+              <template slot-scope="scope">
+                <el-avatar :size="50" :src="scope.row.user.avatar" />
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="用户信息">
+              <template slot-scope="scope">
+                <el-tag>{{ scope.row.user.nickname }}</el-tag><el-tag type="info">{{ scope.row.user.phone }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="二等奖奖品" width="95">
+              <template slot-scope="scope">
+                {{ scope.row.third_goods.name }}
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="奖品中奖价" width="95">
+              <template slot-scope="scope">
+                {{ scope.row.third_price }}
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="领奖方式">
+              <template slot-scope="scope">
+                <!--0未领奖 1红包奖 2领实物奖 3兑换蛋壳 4已放弃-->
+                {{ scope.row.status === 0 ? '未领奖' : scope.row.status === 1 ? '红包奖' : scope.row.status === 2 ? '领实物奖' : scope.row.status === 3 ? '兑换蛋壳' : scope.row.status === 4 ? '已放弃' : '' }}
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="物流订单">
+              <template v-if="scope.row.express_order" slot-scope="scope">
+                订单状态 : {{ scope.row.express_order.status === 1 ? '待发货' : scope.row.express_order.status === 2 ? '待收货' : scope.row.express_order.status === 3 ? '已签收' : scope.row.express_order.status === 4 ? '已放弃' : scope.row.express_order.status === 5 ? '未完善' : '' }}<br>
+                订单编号 : {{ scope.row.express_order.order_no }}<br>
+                物流信息 : {{ scope.row.express_order.express_name }} - {{ scope.row.express_order.express_no }}<br>
+                收货地址 : {{ scope.row.express_order.province }}{{ scope.row.express_order.city }}{{ scope.row.express_order.county }}{{ scope.row.express_order.detail_address }}<br>
+                收货信息 : {{ scope.row.express_order.consignee }} | {{ scope.row.express_order.phone }}<br>
+                订单时间 : {{ scope.row.express_order.created_at }}
               </template>
             </el-table-column>
             <el-table-column align="center" label="操作">
@@ -257,8 +327,9 @@ export default {
           name: ''
         }
       },
-      selectList: [],
-      noSelectList: [],
+      firstList: [],
+      secondList: [],
+      thirdList: [],
       otherList: []
     }
   },
@@ -273,8 +344,9 @@ export default {
         this.selectListLoading = false
         this.noSelectListLoading = false
         this.lucky_draw = res.data.lucky_draw
-        this.selectList = res.data.select_list
-        this.noSelectList = res.data.no_select_list
+        this.firstList = res.data.first_list
+        this.secondList = res.data.second_list
+        this.thirdList = res.data.third_list
         this.otherList = res.data.other_list
       })
     },

@@ -1,9 +1,10 @@
 <template>
   <div class="app-container">
     <search
-      :status-hidden="true"
+      :status-hidden="false"
+      :status-list="statusList"
       :export-hidden="false"
-      :export-model="'user'"
+      :export-model="'luckyDraw'"
       @search="fetchData"
     />
     <el-table
@@ -13,68 +14,51 @@
       border
       fit
       highlight-current-row
-      @current-change="selectCurrentRow"
     >
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column align="center" label="开奖ID" width="95">
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="昵称" width="95">
+      <el-table-column align="center" label="抽奖ID" width="95">
         <template slot-scope="scope">
-          {{ scope.row.nickname }}
+          {{ scope.row.lucky_two_id }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="头像" width="95">
+      <el-table-column align="center" label="抽奖编号" width="180">
         <template slot-scope="scope">
-          <el-avatar :size="50" :src="scope.row.avatar" />
+          {{ scope.row.lucky_draw_no }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="手机">
+      <el-table-column align="center" label="抽奖名称" width="180">
         <template slot-scope="scope">
-          {{ scope.row.phone }}
+          {{ scope.row.lucky_two.name }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="总余额">
+      <el-table-column align="center" label="开始时间" width="180">
         <template slot-scope="scope">
-          {{ (parseFloat(scope.row.balance) + parseFloat(scope.row.red_balance)).toFixed(2) }}
+          {{ scope.row.begin_at }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="余额">
+      <el-table-column align="center" label="开奖时间" width="180">
         <template slot-scope="scope">
-          {{ scope.row.balance }}
+          {{ scope.row.open_at }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="红包余额">
+      <el-table-column label="状态" align="center">
         <template slot-scope="scope">
-          {{ scope.row.red_balance }}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="积分">
-        <template slot-scope="scope">
-          {{ scope.row.point }}
-        </template>
-      </el-table-column>
-      <!--      <el-table-column label="状态" align="center">-->
-      <!--        <template slot-scope="scope">-->
-      <!--          <el-tag-->
-      <!--            :type="scope.row.status === 1 ? '' : scope.row.status === 2 ? 'warning' : scope.row.status === 3 ? 'success' : 'danger'"-->
-      <!--            effect="dark"-->
-      <!--          >-->
-      <!--            {{ scope.row.status_name }}-->
-      <!--          </el-tag>-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
-      <el-table-column align="center" label="注册时间">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.created_at }}</span>
+          <el-tag
+            :type="scope.row.status === 1 ? '' : scope.row.status === 2 ? 'warning' : scope.row.status === 3 ? 'success' : 'danger'"
+            effect="dark"
+          >
+            {{ scope.row.status_name }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="250">
         <template slot-scope="scope">
           <div class="operation-buttons">
-            <el-button v-if="!isSelect" type="warning" size="small" @click="userInfo(scope.row, scope.$index)">用户详情</el-button>
+            <el-button type="warning" size="small" @click="info(scope.row, scope.$index)">开奖详情</el-button>
           </div>
         </template>
       </el-table-column>
@@ -88,40 +72,40 @@
       :limit.sync="listQuery.limit"
       @pagination="fetchData"
     />
-
     <el-dialog
       title="查看详情 "
-      :visible.sync="dialogUserInfo"
+      :visible.sync="dialogInfo"
       class="text-center"
       center
       width="90%"
       :destroy-on-close="true"
-      @close="dialogUserInfo = false;getList()"
+      @close="dialogInfo = false;getList()"
     >
-      <user-info ref="userInfoCom" :user-id="user.id" />
+      <lucky-draw-info ref="infoCom" :lucky-draw-id="luckyDraw.id" />
     </el-dialog>
   </div>
 
 </template>
 
 <script>
-import { getList } from '@/api/wechatUser'
+import { getList } from '@/api/luckyDraw'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import Search from '@/components/Search'
-import UserInfo from '@/components/UserInfo'
+import LuckyDrawInfo from '@/components/LuckyDrawInfo'
 import { getToken } from '@/utils/auth'
 
 export default {
-  name: 'User',
-  components: { Pagination, Search, UserInfo },
+  name: 'Draw',
+  components: { Pagination, Search, LuckyDrawInfo },
   props: {
-    isSelect: {
-      type: Boolean,
-      default: false
+    luckyId: {
+      type: Number,
+      default: 0
     }
   },
   data() {
     return {
+      statusList: [{ id: 0, name: '全部' }, { id: 1, name: '抽奖中' }, { id: 2, name: '开奖中' }, { id: 3, name: '开奖成功' }],
       switchLoading: true,
       total: 0,
       list: null,
@@ -132,7 +116,8 @@ export default {
         search_value: '',
         status: null,
         start_time: '',
-        end_time: ''
+        end_time: '',
+        lucky_id: 0
       },
       options: null,
       sellers: null,
@@ -141,17 +126,10 @@ export default {
       dialogHintVisible: false,
       dialogVisible: false,
       dialogSelectGoods: false,
-      dialogUserInfo: false,
+      dialogInfo: false,
       dialogStatus: 'create',
-      user: {
-        id: 0,
-        phone: '',
-        nickname: '',
-        avatar: '',
-        balance: '0.00',
-        red_balance: '0.00',
-        created_at: '',
-        point: 0
+      luckyDraw: {
+        id: 0
       },
       tag: '',
       formLabelWidth: '120px'
@@ -187,17 +165,15 @@ export default {
       console.log(this.listQuery)
       this.getList()
     },
-    userInfo(item) {
-      this.dialogUserInfo = true
-      this.user = item
+    info(item) {
+      this.dialogInfo = true
+      this.luckyDraw = item
       this.$nextTick(() => {
-        this.$refs.userInfoCom.loadData(item.id)
+        this.$refs.infoCom.loadData(item.id)
       })
     },
-    selectCurrentRow(row) {
-      this.$emit('select', row)
-    },
-    loadData() {
+    loadData(id) {
+      this.listQuery.lucky_id = id
       this.getList()
     }
   }

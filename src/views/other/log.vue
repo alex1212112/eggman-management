@@ -36,7 +36,7 @@
             :type="scope.row.attribute === 'point' ? 'primary' : scope.row.attribute === 'balance' ? 'warning' : scope.row.attribute === 'red_balance' ? 'info' : ''"
             effect="dark"
           >
-            {{ scope.row.attribute === 'point' ? '积分' : scope.row.attribute === 'balance' ? '余额' : scope.row.attribute === 'red_balance' ? '红包余额' : '' }}
+            {{ scope.row.attribute === 'point' ? '积分' : scope.row.attribute === 'balance' ? '余额' : scope.row.attribute === 'red_balance' ? '红包余额' : scope.row.attribute === 'fragments' ? '蛋壳' : '' }}
           </el-tag>
 
         </template>

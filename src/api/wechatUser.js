@@ -10,7 +10,7 @@ export function getList(params) {
 
 export function getInfo(params) {
   return request({
-    url: 'admin/v1/user/' + params,
+    url: 'admin/v2/user/' + params,
     method: 'get'
   })
 }

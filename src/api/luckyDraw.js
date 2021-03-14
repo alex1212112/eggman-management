@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getList(params) {
   return request({
-    url: 'admin/v1/luckyDraw',
+    url: 'admin/v2/luckyDraw',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function getList(params) {
 
 export function getInfo(params) {
   return request({
-    url: 'admin/v1/luckyDraw/' + params,
+    url: 'admin/v2/luckyDraw/' + params,
     method: 'get'
   })
 }

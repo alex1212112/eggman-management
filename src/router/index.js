@@ -161,6 +161,26 @@ export const asyncRoutes = [
   //   ]
   // },
   {
+    path: '/setting_system',
+    component: Layout,
+    redirect: '/setting',
+    name: '系统设置',
+    meta: {
+      title: '系统设置',
+      icon: 'lock'
+    },
+    children: [
+      {
+        path: '/setting',
+        component: () => import('@/views/setting/index'),
+        name: '系统设置',
+        meta: {
+          title: '系统设置'
+        }
+      }
+    ]
+  },
+  {
     path: '/goods',
     component: Layout,
     redirect: '/goods/category',
@@ -235,8 +255,16 @@ export const asyncRoutes = [
         }
       },
       {
+        path: '/week',
+        component: () => import('@/views/luckyDraw/week'),
+        name: '每周抽奖',
+        meta: {
+          title: '每周抽奖'
+        }
+      },
+      {
         path: '/draw',
-        component: () => import('@/views/luckyDraw/draw'),
+        component: () => import('@/views/luckyDraw/draw2'),
         name: '开奖记录',
         meta: {
           title: '开奖记录'
@@ -343,7 +371,7 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: '/list',
+        path: '/egg/list',
         component: () => import('@/views/egg/eggs'),
         name: '彩蛋列表',
         meta: {
@@ -351,11 +379,11 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '/list',
-        component: () => import('@/views/egg/eggs'),
-        name: '彩蛋列表',
+        path: '/egg/log',
+        component: () => import('@/views/egg/log'),
+        name: '彩蛋记录',
         meta: {
-          title: '彩蛋列表'
+          title: '彩蛋记录'
         }
       }
     ]
@@ -392,6 +420,42 @@ export const asyncRoutes = [
         name: '订单管理',
         meta: {
           title: '订单管理'
+        }
+      }
+    ]
+  },
+  {
+    path: '/vip',
+    component: Layout,
+    redirect: '/vip/index',
+    name: '会员后台',
+    meta: {
+      title: '会员后台',
+      icon: 'lock'
+    },
+    children: [
+      {
+        path: '/vip/vip',
+        component: () => import('@/views/vip/vip'),
+        name: 'VIP设置',
+        meta: {
+          title: 'VIP设置'
+        }
+      },
+      {
+        path: '/vip/svip',
+        component: () => import('@/views/vip/svip'),
+        name: 'SVIP设置',
+        meta: {
+          title: 'SVIP设置'
+        }
+      },
+      {
+        path: '/vip/agent',
+        component: () => import('@/views/vip/agent'),
+        name: '区域代理',
+        meta: {
+          title: '区域代理'
         }
       }
     ]

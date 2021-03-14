@@ -49,7 +49,7 @@
             <el-tag type="danger" effect="dark">资产信息</el-tag>
           </div>
           <el-row>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-card :body-style=" {textAlign: 'center'} ">
                 <div slot="header" class="clearfix" style="text-align: center">
                   <span>账户余额</span>
@@ -58,24 +58,24 @@
                 <el-link type="primary" style="margin-top: 20px" @click="userLog(user.id,'balance')">查看明细</el-link>
               </el-card>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-card :body-style=" {textAlign: 'center'} ">
                 <div slot="header" class="clearfix" style="text-align: center">
-                  <span>红包余额</span>
+                  <span>蛋壳</span>
                 </div>
-                <div>{{ user.red_balance }}</div>
-                <el-link type="primary" style="margin-top: 20px" @click="userLog(user.id,'red_balance')">查看明细</el-link>
+                <div>{{ user.fragments }}</div>
+                <el-link type="primary" style="margin-top: 20px" @click="userLog(user.id,'fragments')">查看明细</el-link>
               </el-card>
             </el-col>
-            <el-col :span="8">
-              <el-card :body-style=" {textAlign: 'center'} ">
-                <div slot="header" class="clearfix" style="text-align: center">
-                  <span>积分</span>
-                </div>
-                <div>{{ user.point }}</div>
-                <el-link type="primary" style="margin-top: 20px" @click="userLog(user.id,'point')">查看明细</el-link>
-              </el-card>
-            </el-col>
+            <!--            <el-col :span="8">-->
+            <!--              <el-card :body-style=" {textAlign: 'center'} ">-->
+            <!--                <div slot="header" class="clearfix" style="text-align: center">-->
+            <!--                  <span>积分</span>-->
+            <!--                </div>-->
+            <!--                <div>{{ user.point }}</div>-->
+            <!--                <el-link type="primary" style="margin-top: 20px" @click="userLog(user.id,'point')">查看明细</el-link>-->
+            <!--              </el-card>-->
+            <!--            </el-col>-->
           </el-row>
         </el-card>
       </el-col>
@@ -96,22 +96,22 @@
           >
             <el-table-column align="center" label="抽奖ID" width="95">
               <template slot-scope="scope">
-                {{ scope.row.lucky_id }}
+                {{ scope.row.lucky_two_id }}
               </template>
             </el-table-column>
             <el-table-column align="center" label="开奖ID" width="95">
               <template slot-scope="scope">
-                {{ scope.row.lucky_draw_id }}
+                {{ scope.row.lucky_draw_two_id }}
               </template>
             </el-table-column>
-            <el-table-column align="center" label="商品名称">
+            <el-table-column align="center" label="开奖编号" width="95">
               <template slot-scope="scope">
-                {{ scope.row.goods.name }}
+                {{ scope.row.lucky_draw.lucky_draw_no }}
               </template>
             </el-table-column>
-            <el-table-column align="center" label="抽奖金额">
+            <el-table-column align="center" label="抽奖保证金">
               <template slot-scope="scope">
-                {{ scope.row.lucky.price }}
+                {{ scope.row.lucky.amount }}
               </template>
             </el-table-column>
             <el-table-column align="center" label="参与时间">
@@ -124,11 +124,6 @@
                 {{ scope.row.lucky_draw.begin_at }}
               </template>
             </el-table-column>
-            <el-table-column align="center" label="结束时间">
-              <template slot-scope="scope">
-                {{ scope.row.lucky_draw.end_at }}
-              </template>
-            </el-table-column>
             <el-table-column align="center" label="开奖时间">
               <template slot-scope="scope">
                 {{ scope.row.lucky_draw.open_at }}
@@ -137,17 +132,18 @@
             <el-table-column align="center" label="中奖状态">
               <template slot-scope="scope">
                 <el-tag
-                  :type="scope.row.status === 1 ? 'info' : scope.row.status === 2 ? 'warning' : scope.row.status === 3 ? 'success' : scope.row.status === 4 ? 'danger' : '' "
+                  :type="scope.row.level === 0 ? 'info' : scope.row.level === 1 ? 'success' : scope.row.level === 2 ? 'warning' : scope.row.level === 3 ? 'danger' : '' "
                   effect="dark"
                 >
-                  {{ scope.row.status === 1 ? '待开奖' : scope.row.status === 2 ? '中奖' : scope.row.status === 3 ? '不中奖' : scope.row.status === 4 ? '开奖失败' : '' }}
+                  {{ scope.row.level === 0 ? '待开奖' : scope.row.level === 1 ? '一等奖' : scope.row.level === 2 ? '二等奖' : scope.row.level === 3 ? '三等奖' : '' }}
                 </el-tag>
 
               </template>
             </el-table-column>
-            <el-table-column align="center" label="参与红包">
+            <el-table-column align="center" label="领奖方式">
               <template slot-scope="scope">
-                {{ scope.row.join_red_package }}
+                <!--0未领奖 1红包奖 2领实物奖 3兑换蛋壳 4已放弃-->
+                {{ scope.row.status === 0 ? '未领奖' : scope.row.status === 1 ? '红包奖' : scope.row.status === 2 ? '领实物奖' : scope.row.status === 3 ? '兑换蛋壳' : scope.row.status === 4 ? '已放弃' : '' }}
               </template>
             </el-table-column>
             <el-table-column align="center" label="物流订单">
@@ -157,7 +153,8 @@
                   订单编号 : {{ scope.row.express_order.order_no }}<br>
                   物流信息 : {{ scope.row.express_order.express_name }} - {{ scope.row.express_order.express_no }}<br>
                   收货地址 : {{ scope.row.express_order.province }}{{ scope.row.express_order.city }}{{ scope.row.express_order.county }}{{ scope.row.express_order.detail_address }}<br>
-                  收货信息 : {{ scope.row.express_order.consignee }} | {{ scope.row.express_order.phone }}
+                  收货信息 : {{ scope.row.express_order.consignee }} | {{ scope.row.express_order.phone }}<br>
+                  订单时间 : {{ scope.row.express_order.created_at }}
                 </div>
                 <div v-else>
                   {{ '' }}
@@ -217,7 +214,7 @@ export default {
       getInfo(this.userId).then(res => {
         this.listLoading = false
         this.user = res.data
-        this.list = res.data.lucky_draw_user
+        this.list = res.data.lucky_draw_user_two
       })
     },
     loadData(id) {
