@@ -155,7 +155,7 @@ export const asyncRoutes = [
     name: '系统管理',
     meta: {
       title: '系统管理',
-      icon: 'lock'
+      icon: 'el-icon-setting'
     },
     children: [
       {
@@ -163,7 +163,8 @@ export const asyncRoutes = [
         component: () => import('@/views/setting/index'),
         name: '系统设置',
         meta: {
-          title: '系统设置'
+          title: '系统设置',
+          icon: 'el-icon-setting'
         }
       }
     ]
@@ -175,7 +176,7 @@ export const asyncRoutes = [
     name: '用户管理',
     meta: {
       title: '用户管理',
-      icon: 'lock'
+      icon: 'el-icon-user-solid'
     },
     children: [
       {
@@ -183,7 +184,8 @@ export const asyncRoutes = [
         component: () => import('@/views/user/user'),
         name: '用户管理',
         meta: {
-          title: '用户管理'
+          title: '用户管理',
+          icon: 'el-icon-user'
         }
       }
     ]
@@ -195,7 +197,7 @@ export const asyncRoutes = [
     name: '财务管理',
     meta: {
       title: '财务管理',
-      icon: 'lock'
+      icon: 'el-icon-s-finance'
     },
     children: [
       {
@@ -203,7 +205,8 @@ export const asyncRoutes = [
         component: () => import('@/views/other/log'),
         name: '用户流水',
         meta: {
-          title: '用户流水'
+          title: '用户流水',
+          icon: 'el-icon-notebook-1'
         }
       },
       {
@@ -211,7 +214,8 @@ export const asyncRoutes = [
         component: () => import('@/views/other/cash'),
         name: '用户提现',
         meta: {
-          title: '用户提现'
+          title: '用户提现',
+          icon: 'el-icon-money'
         }
       }
     ]
@@ -223,7 +227,7 @@ export const asyncRoutes = [
     name: '抽奖后台',
     meta: {
       title: '抽奖后台',
-      icon: 'lock'
+      icon: 'el-icon-help'
     },
     children: [
       {
@@ -233,7 +237,7 @@ export const asyncRoutes = [
         name: '奖品管理',
         meta: {
           title: '奖品管理',
-          icon: 'lock'
+          icon: 'el-icon-star-on'
         },
         children: [
           {
@@ -241,7 +245,8 @@ export const asyncRoutes = [
             component: () => import('@/views/goods/category'),
             name: '奖品分类',
             meta: {
-              title: '奖品分类'
+              title: '奖品分类',
+              icon: 'el-icon-s-grid'
             }
           },
           {
@@ -249,7 +254,8 @@ export const asyncRoutes = [
             component: () => import('@/views/goods/goods'),
             name: '奖品列表',
             meta: {
-              title: '奖品列表'
+              title: '奖品列表',
+              icon: 'el-icon-s-goods'
             }
           }
         ]

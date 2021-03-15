@@ -35,24 +35,14 @@
           {{ scope.row.phone }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="总余额">
-        <template slot-scope="scope">
-          {{ (parseFloat(scope.row.balance) + parseFloat(scope.row.red_balance)).toFixed(2) }}
-        </template>
-      </el-table-column>
       <el-table-column align="center" label="余额">
         <template slot-scope="scope">
           {{ scope.row.balance }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="红包余额">
+      <el-table-column align="center" label="蛋壳">
         <template slot-scope="scope">
-          {{ scope.row.red_balance }}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="积分">
-        <template slot-scope="scope">
-          {{ scope.row.point }}
+          {{ scope.row.fragments }}
         </template>
       </el-table-column>
       <!--      <el-table-column label="状态" align="center">-->
