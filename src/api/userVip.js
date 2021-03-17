@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function postAdd(data) {
   return request({
-    url: 'admin/v2/svip',
+    url: 'admin/v2/userVip',
     method: 'post',
     data
   })
@@ -10,7 +10,7 @@ export function postAdd(data) {
 
 export function putEdit(data) {
   return request({
-    url: 'admin/v2/svip',
+    url: 'admin/v2/userVip',
     method: 'put',
     data
   })
@@ -18,15 +18,7 @@ export function putEdit(data) {
 
 export function getList(params) {
   return request({
-    url: 'admin/v2/svip',
-    method: 'get',
-    params
-  })
-}
-
-export function getAll(params) {
-  return request({
-    url: 'admin/v2/svip/all',
+    url: 'admin/v2/userVip',
     method: 'get',
     params
   })
@@ -34,7 +26,7 @@ export function getAll(params) {
 
 export function delItem(params) {
   return request({
-    url: 'admin/v2/svip',
+    url: 'admin/v2/userVip',
     method: 'delete',
     params
   })

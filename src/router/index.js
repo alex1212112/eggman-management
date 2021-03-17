@@ -423,6 +423,14 @@ export const asyncRoutes = [
         meta: {
           title: '区域代理'
         }
+      },
+      {
+        path: 'user',
+        component: () => import('@/views/vip/userVip'),
+        name: '会员用户',
+        meta: {
+          title: '会员用户'
+        }
       }
     ]
   },
