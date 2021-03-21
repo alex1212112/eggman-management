@@ -17,15 +17,36 @@
       </el-row>
       <el-row style="margin-bottom: 20px">
         <el-col :span="12">
+          <el-form-item label="直接邀请赠送抽奖券">
+            <el-input v-model="setting.parent_gift" autocomplete="off" style="width: 195px;" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="间接邀请赠送抽奖券">
+            <el-input v-model="setting.grandpa_gift" autocomplete="off" style="width: 195px;" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row style="margin-bottom: 20px">
+        <el-col :span="12">
           <el-form-item label="抽奖券过期时间(天)">
             <el-input v-model="setting.ticket_expire" autocomplete="off" style="width: 195px;" />
           </el-form-item>
         </el-col>
-        <!--        <el-col :span="12">-->
-        <!--          <el-form-item label="每日赠送抽奖券">-->
-        <!--            <el-input v-model="setting.every_day_gift" autocomplete="off" style="width: 195px;" />-->
-        <!--          </el-form-item>-->
-        <!--        </el-col>-->
+        <el-col :span="12">
+          <el-form-item label="会员提现手续费(%)">
+            <el-input v-model="setting.vip_cash_fee" autocomplete="off" style="width: 195px;" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row style="margin-bottom: 20px">
+        <el-col :span="12">
+          <el-form-item label="系统开关">
+            <el-radio v-model="setting.system_power" :label="'on'">开</el-radio>
+            <el-radio v-model="setting.system_power" :label="'off'">关</el-radio>
+          </el-form-item>
+        </el-col>
       </el-row>
       <!--      <el-row>-->
       <!--        <el-col :span="24">-->
@@ -91,7 +112,11 @@ export default {
       setting: {
         first_gift: 15,
         every_day_gift: 5,
-        ticket_expire: 365
+        ticket_expire: 365,
+        vip_cash_fee: '0.00',
+        parent_gift: 10,
+        grandpa_gift: 5,
+        system_power: 'on'
       },
       tag: '',
       formLabelWidth: '120px'

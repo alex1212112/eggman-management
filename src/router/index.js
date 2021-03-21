@@ -166,6 +166,15 @@ export const asyncRoutes = [
           title: '系统设置',
           icon: 'el-icon-setting'
         }
+      },
+      {
+        path: 'notice',
+        component: () => import('@/views/setting/notice'),
+        name: '系统消息',
+        meta: {
+          title: '系统消息',
+          icon: 'el-icon-warning-outline'
+        }
       }
     ]
   },
@@ -430,6 +439,46 @@ export const asyncRoutes = [
         name: '会员用户',
         meta: {
           title: '会员用户'
+        }
+      },
+      {
+        path: 'order',
+        component: () => import('@/views/vip/order'),
+        name: '实名订单',
+        meta: {
+          title: '实名订单'
+        }
+      },
+      {
+        path: 'real',
+        component: () => import('@/views/vip/real'),
+        name: '实名认证',
+        meta: {
+          title: '实名认证'
+        }
+      },
+      {
+        path: 'bank',
+        component: () => import('@/views/vip/bank'),
+        name: '银行卡认证',
+        meta: {
+          title: '银行卡认证'
+        }
+      },
+      {
+        path: 'cash',
+        component: () => import('@/views/vip/cash'),
+        name: '会员提现',
+        meta: {
+          title: '会员提现'
+        }
+      },
+      {
+        path: 'log',
+        component: () => import('@/views/vip/log'),
+        name: '会员流水',
+        meta: {
+          title: '会员流水'
         }
       }
     ]
