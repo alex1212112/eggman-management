@@ -191,10 +191,19 @@ export const asyncRoutes = [
       {
         path: 'user',
         component: () => import('@/views/user/user'),
-        name: '用户管理',
+        name: '普通用户',
         meta: {
-          title: '用户管理',
+          title: '普通用户',
           icon: 'el-icon-user'
+        }
+      },
+      {
+        path: 'member',
+        component: () => import('@/views/vip/userVip'),
+        name: '会员用户',
+        meta: {
+          title: '会员用户',
+          icon: 'el-icon-s-custom'
         }
       }
     ]
@@ -202,7 +211,7 @@ export const asyncRoutes = [
   {
     path: '/finance',
     component: Layout,
-    redirect: '/finance/log',
+    redirect: '/finance/user/log',
     name: '财务管理',
     meta: {
       title: '财务管理',
@@ -210,21 +219,111 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'log',
-        component: () => import('@/views/other/log'),
-        name: '用户流水',
+        path: 'user',
+        component: LayoutChild,
+        redirect: '/finance/user/log',
+        name: '用户财务',
         meta: {
-          title: '用户流水',
-          icon: 'el-icon-notebook-1'
+          title: '用户财务',
+          icon: 'el-icon-s-management'
+        },
+        children: [
+          {
+            path: 'log',
+            component: () => import('@/views/other/log'),
+            name: '用户流水',
+            meta: {
+              title: '用户流水',
+              icon: 'el-icon-notebook-1'
+            }
+          },
+          {
+            path: 'cash',
+            component: () => import('@/views/other/cash'),
+            name: '用户提现',
+            meta: {
+              title: '用户提现',
+              icon: 'el-icon-money'
+            }
+          }
+        ]
+      },
+      {
+        path: 'member',
+        component: LayoutChild,
+        redirect: '/finance/member/log',
+        name: '会员财务',
+        meta: {
+          title: '会员财务',
+          icon: 'el-icon-c-scale-to-original'
+        },
+        children: [
+          {
+            path: 'log',
+            component: () => import('@/views/vip/log'),
+            name: '会员流水',
+            meta: {
+              title: '会员流水',
+              icon: 'el-icon-edit-outline'
+            }
+          },
+          {
+            path: 'cash',
+            component: () => import('@/views/vip/cash'),
+            name: '会员提现',
+            meta: {
+              title: '会员提现',
+              icon: 'el-icon-suitcase'
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: 'order',
+    component: Layout,
+    redirect: '/order/express',
+    name: '订单管理',
+    meta: {
+      title: '订单管理',
+      icon: 'lock'
+    },
+    children: [
+      {
+        path: 'express',
+        component: () => import('@/views/order/express'),
+        name: '快递订单',
+        meta: {
+          title: '快递订单',
+          icon: 'el-icon-truck'
         }
       },
       {
-        path: 'cash',
-        component: () => import('@/views/other/cash'),
-        name: '用户提现',
+        path: 'pay',
+        component: () => import('@/views/order/pay'),
+        name: '支付订单',
         meta: {
-          title: '用户提现',
-          icon: 'el-icon-money'
+          title: '支付订单',
+          icon: 'el-icon-success'
+        }
+      },
+      {
+        path: 'mallOrder',
+        component: () => import('@/views/mall/order'),
+        name: '商城订单',
+        meta: {
+          title: '商城订单',
+          icon: 'el-icon-s-shop'
+        }
+      },
+      {
+        path: 'realOrder',
+        component: () => import('@/views/vip/order'),
+        name: '实名订单',
+        meta: {
+          title: '实名订单',
+          icon: 'el-icon-camera'
         }
       }
     ]
@@ -276,15 +375,16 @@ export const asyncRoutes = [
         name: '抽奖管理',
         meta: {
           title: '抽奖管理',
-          icon: 'lock'
+          icon: 'el-icon-help'
         },
         children: [
           {
             path: 'manage',
             component: () => import('@/views/luckyDraw/manage2'),
-            name: '抽奖设置',
+            name: '每日抽奖',
             meta: {
-              title: '抽奖设置'
+              title: '每日抽奖',
+              icon: 'el-icon-info'
             }
           },
           {
@@ -292,7 +392,8 @@ export const asyncRoutes = [
             component: () => import('@/views/luckyDraw/week'),
             name: '每周抽奖',
             meta: {
-              title: '每周抽奖'
+              title: '每周抽奖',
+              icon: 'el-icon-picture-outline-round'
             }
           },
           {
@@ -300,7 +401,8 @@ export const asyncRoutes = [
             component: () => import('@/views/luckyDraw/draw2'),
             name: '开奖记录',
             meta: {
-              title: '开奖记录'
+              title: '开奖记录',
+              icon: 'el-icon-s-promotion'
             }
           }
         ]
@@ -312,7 +414,7 @@ export const asyncRoutes = [
         name: '彩蛋管理',
         meta: {
           title: '彩蛋管理',
-          icon: 'lock'
+          icon: 'el-icon-magic-stick'
         },
         children: [
           {
@@ -320,7 +422,8 @@ export const asyncRoutes = [
             component: () => import('@/views/egg/eggs'),
             name: '彩蛋列表',
             meta: {
-              title: '彩蛋列表'
+              title: '彩蛋列表',
+              icon: 'el-icon-present'
             }
           },
           {
@@ -328,35 +431,8 @@ export const asyncRoutes = [
             component: () => import('@/views/egg/log'),
             name: '彩蛋记录',
             meta: {
-              title: '彩蛋记录'
-            }
-          }
-        ]
-      },
-      {
-        path: 'order',
-        component: LayoutChild,
-        redirect: '/luckyAdmin/order/express',
-        name: '订单管理',
-        meta: {
-          title: '订单管理',
-          icon: 'lock'
-        },
-        children: [
-          {
-            path: 'express',
-            component: () => import('@/views/order/express'),
-            name: '快递订单',
-            meta: {
-              title: '快递订单'
-            }
-          },
-          {
-            path: 'pay',
-            component: () => import('@/views/order/pay'),
-            name: '支付订单',
-            meta: {
-              title: '支付订单'
+              title: '彩蛋记录',
+              icon: 'el-icon-set-up'
             }
           }
         ]
@@ -370,7 +446,7 @@ export const asyncRoutes = [
     name: '商城后台',
     meta: {
       title: '商城后台',
-      icon: 'lock'
+      icon: 'el-icon-s-shop'
     },
     children: [
       {
@@ -378,7 +454,8 @@ export const asyncRoutes = [
         component: () => import('@/views/mall/category'),
         name: '分类管理',
         meta: {
-          title: '分类管理'
+          title: '分类管理',
+          icon: 'el-icon-s-grid'
         }
       },
       {
@@ -386,15 +463,8 @@ export const asyncRoutes = [
         component: () => import('@/views/mall/goods'),
         name: '商品管理',
         meta: {
-          title: '商品管理'
-        }
-      },
-      {
-        path: 'order',
-        component: () => import('@/views/mall/order'),
-        name: '订单管理',
-        meta: {
-          title: '订单管理'
+          title: '商品管理',
+          icon: 'el-icon-shopping-cart-2'
         }
       }
     ]
@@ -406,7 +476,7 @@ export const asyncRoutes = [
     name: '会员后台',
     meta: {
       title: '会员后台',
-      icon: 'lock'
+      icon: 'el-icon-s-check'
     },
     children: [
       {
@@ -414,7 +484,8 @@ export const asyncRoutes = [
         component: () => import('@/views/vip/vip'),
         name: 'VIP设置',
         meta: {
-          title: 'VIP设置'
+          title: 'VIP设置',
+          icon: 'el-icon-eleme'
         }
       },
       {
@@ -422,7 +493,8 @@ export const asyncRoutes = [
         component: () => import('@/views/vip/svip'),
         name: 'SVIP设置',
         meta: {
-          title: 'SVIP设置'
+          title: 'SVIP设置',
+          icon: 'el-icon-platform-eleme'
         }
       },
       {
@@ -430,23 +502,8 @@ export const asyncRoutes = [
         component: () => import('@/views/vip/agent'),
         name: '区域代理',
         meta: {
-          title: '区域代理'
-        }
-      },
-      {
-        path: 'user',
-        component: () => import('@/views/vip/userVip'),
-        name: '会员用户',
-        meta: {
-          title: '会员用户'
-        }
-      },
-      {
-        path: 'order',
-        component: () => import('@/views/vip/order'),
-        name: '实名订单',
-        meta: {
-          title: '实名订单'
+          title: '区域代理',
+          icon: 'el-icon-share'
         }
       },
       {
@@ -454,7 +511,8 @@ export const asyncRoutes = [
         component: () => import('@/views/vip/real'),
         name: '实名认证',
         meta: {
-          title: '实名认证'
+          title: '实名认证',
+          icon: 'el-icon-s-check'
         }
       },
       {
@@ -462,23 +520,8 @@ export const asyncRoutes = [
         component: () => import('@/views/vip/bank'),
         name: '银行卡认证',
         meta: {
-          title: '银行卡认证'
-        }
-      },
-      {
-        path: 'cash',
-        component: () => import('@/views/vip/cash'),
-        name: '会员提现',
-        meta: {
-          title: '会员提现'
-        }
-      },
-      {
-        path: 'log',
-        component: () => import('@/views/vip/log'),
-        name: '会员流水',
-        meta: {
-          title: '会员流水'
+          title: '银行卡认证',
+          icon: 'el-icon-bank-card'
         }
       }
     ]
