@@ -38,3 +38,10 @@ export function getScopes() {
     method: 'get'
   })
 }
+
+export function getDashboardData() {
+  return request({
+    url: 'admin/v2/dashboard',
+    method: 'get'
+  })
+}

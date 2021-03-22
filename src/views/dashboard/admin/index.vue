@@ -1,11 +1,9 @@
 <template>
   <div class="dashboard-editor-container">
-    <github-corner class="github-corner" />
-
-    <panel-group @handleSetLineChartData="handleSetLineChartData" />
+    <panel-group :user-count="result.user_count" :vip-count="result.vip_count" :total-income="result.total_income" :total-pay="result.total_pay" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
+      <div />
     </el-row>
 
     <el-row :gutter="32">
@@ -41,41 +39,20 @@
 </template>
 
 <script>
-import GithubCorner from '@/components/GithubCorner'
 import PanelGroup from './components/PanelGroup'
-import LineChart from './components/LineChart'
 import RaddarChart from './components/RaddarChart'
 import PieChart from './components/PieChart'
 import BarChart from './components/BarChart'
 import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
 import BoxCard from './components/BoxCard'
-
-const lineChartData = {
-  newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
-  },
-  messages: {
-    expectedData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
-  },
-  purchases: {
-    expectedData: [80, 100, 121, 104, 105, 90, 100],
-    actualData: [120, 90, 100, 138, 142, 130, 130]
-  },
-  shoppings: {
-    expectedData: [130, 140, 141, 142, 145, 150, 160],
-    actualData: [120, 82, 91, 154, 162, 140, 130]
-  }
-}
+import { getDashboardData } from '@/api/admin'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'DashboardAdmin',
   components: {
-    GithubCorner,
     PanelGroup,
-    LineChart,
     RaddarChart,
     PieChart,
     BarChart,
@@ -85,12 +62,26 @@ export default {
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+      result: {}
     }
   },
+  computed: {
+    headers() {
+      return {
+        Authorization: `Bearer ${getToken()}`
+      }
+    }
+  },
+  mounted() {
+    this.fetchData()
+  },
   methods: {
-    handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
+    fetchData() {
+      getDashboardData().then(res => {
+        if (res.code === 200) {
+          this.result = res.data
+        }
+      })
     }
   }
 }

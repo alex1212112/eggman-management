@@ -7,9 +7,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            New Visits
+            用户数量
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="userCount" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -20,9 +20,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Messages
+            会员数量
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="vipCount" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -33,9 +33,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Purchases
+            订单总收入
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <span class="card-panel-num">{{ totalIncome }}</span>
         </div>
       </div>
     </el-col>
@@ -46,9 +46,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Shoppings
+            提现总支出
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <span class="card-panel-num">{{ totalPay }}</span>
         </div>
       </div>
     </el-col>
@@ -61,6 +61,24 @@ import CountTo from 'vue-count-to'
 export default {
   components: {
     CountTo
+  },
+  props: {
+    userCount: {
+      type: Number,
+      default: 0
+    },
+    vipCount: {
+      type: Number,
+      default: 0
+    },
+    totalIncome: {
+      type: String,
+      default: '0.00'
+    },
+    totalPay: {
+      type: String,
+      default: '0.00'
+    }
   },
   methods: {
     handleSetLineChartData(type) {
