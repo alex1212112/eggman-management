@@ -56,6 +56,11 @@ export default {
     this.chart.dispose()
     this.chart = null
   },
+  watch : {
+    maleCount() {
+      this.initChart()
+    },
+  },
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')

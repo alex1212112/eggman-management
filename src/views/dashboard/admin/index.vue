@@ -130,7 +130,7 @@ export default {
     fetchData() {
       getDashboardData().then(res => {
         if (res.code === 200) {
-          this.result = res.data
+          this.result = res.data 
           this.result.month = res.data.month_income.map(item => {
             return item.date
           })
