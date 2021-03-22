@@ -64,10 +64,18 @@ export default {
   data() {
     return {
       result: {
+        user_count: 0,
+        vip_count: 0,
+        total_income: '0.00',
+        total_pay: '0.00',
+        male_count: 0,
+        female_count: 0,
+        unKnow_count: 0,
         month: [],
         wechatMini: [],
         wechatApp: [],
-        aliPay: []
+        aliPay: [],
+        month_income: []
       }
     }
   },
