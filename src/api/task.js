@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function putEdit(data) {
   return request({
-    url: 'admin/v1/task',
+    url: 'admin/v2/task',
     method: 'put',
     data
   })
@@ -10,7 +10,7 @@ export function putEdit(data) {
 
 export function getList(params) {
   return request({
-    url: 'admin/v1/task',
+    url: 'admin/v2/task',
     method: 'get',
     params
   })

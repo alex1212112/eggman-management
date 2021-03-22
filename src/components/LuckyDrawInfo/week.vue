@@ -8,49 +8,55 @@
           </div>
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="抽奖 ID">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two_id }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week_id }}</span>
             </el-form-item>
             <el-form-item label="重复期数">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.repeat }} 期</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.repeat }} 期</span>
             </el-form-item>
             <el-form-item label="保证金">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.amount }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.amount }}</span>
             </el-form-item>
             <el-form-item label="开奖人数">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.count }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.count }}</span>
+            </el-form-item>
+            <el-form-item label="特等奖人数">
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.fest_count }}</span>
             </el-form-item>
             <el-form-item label="一等奖人数">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.first_count }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.first_count }}</span>
             </el-form-item>
             <el-form-item label="二等奖人数">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.second_count }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.second_count }}</span>
             </el-form-item>
             <el-form-item label="三等奖人数">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.third_count }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.third_count }}</span>
+            </el-form-item>
+            <el-form-item label="特等奖红包">
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.fest_bonus }}</span>
             </el-form-item>
             <el-form-item label="一等奖红包">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.first_bonus }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.first_bonus }}</span>
             </el-form-item>
             <el-form-item label="二等奖奖品">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.second_goods.name }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.second_goods.name }}</span>
             </el-form-item>
             <el-form-item label="二等奖金额">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.second_price }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.second_price }}</span>
             </el-form-item>
             <el-form-item label="三等奖奖品">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.third_goods.name }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.third_goods.name }}</span>
             </el-form-item>
             <el-form-item label="三等奖金额">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.third_price }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.third_price }}</span>
             </el-form-item>
             <el-form-item label="上线时间">
-              <span>{{ lucky_draw.lucky_two && lucky_draw.lucky_two.online_at }}</span>
+              <span>{{ lucky_draw.lucky_week && lucky_draw.lucky_week.online_at }}</span>
             </el-form-item>
             <el-form-item label="下线时间">
-              <span>{{ lucky_draw.lucky_two.down_at === null ? '未下线' : lucky_draw.lucky_two.down_at }}</span>
+              <span>{{ lucky_draw.lucky_week.down_at === null ? '未下线' : lucky_draw.lucky_week.down_at }}</span>
             </el-form-item>
             <el-form-item label="抽奖状态">
-              <span>{{ lucky_draw.lucky_two.status === 1 ? '待上线' : lucky_draw.lucky_two.status === 2 ? '进行中' : lucky_draw.lucky_two.status === 3 ? '已暂停' : lucky_draw.lucky_two.status === 4 ? '已下线' : '' }}</span>
+              <span>{{ lucky_draw.lucky_week.status === 1 ? '待上线' : lucky_draw.lucky_week.status === 2 ? '进行中' : lucky_draw.lucky_week.status === 3 ? '已暂停' : lucky_draw.lucky_week.status === 4 ? '已下线' : '' }}</span>
             </el-form-item>
           </el-form>
         </el-card>
@@ -79,6 +85,52 @@
               <span>{{ lucky_draw.status === 1 ? '进行中' : lucky_draw.status === 2 ? '开奖中' : lucky_draw.status === 3 ? '开奖成功' : '' }}</span>
             </el-form-item>
           </el-form>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col>
+        <el-card class="box-card" style="margin-top: 10px;">
+          <div slot="header" class="clearfix" style="text-align: center">
+            <el-tag type="danger" effect="dark">特等奖中奖信息</el-tag>
+          </div>
+          <el-table
+            v-loading="selectListLoading"
+            :data="festList"
+            element-loading-text="Loading"
+            border
+            fit
+            highlight-current-row
+          >
+            <el-table-column align="center" label="头像" width="95">
+              <template slot-scope="scope">
+                <el-avatar :size="50" :src="scope.row.user.avatar" />
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="用户信息">
+              <template slot-scope="scope">
+                <el-tag>{{ scope.row.user.nickname }}</el-tag><el-tag type="info">{{ scope.row.user.phone }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="中奖红包">
+              <template slot-scope="scope">
+                {{ scope.row.fest_bonus }}
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="领奖方式">
+              <template slot-scope="scope">
+                <!--0未领奖 1红包奖 2领实物奖 3兑换蛋壳 4已放弃-->
+                {{ scope.row.status === 0 ? '未领奖' : scope.row.status === 1 ? '红包奖' : scope.row.status === 2 ? '领实物奖' : scope.row.status === 3 ? '兑换蛋壳' : scope.row.status === 4 ? '已放弃' : '' }}
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="操作">
+              <template slot-scope="scope">
+                <div class="operation-buttons">
+                  <el-button type="warning" size="small" @click="userInfo(scope.row, scope.$index)">查看用户信息</el-button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-card>
       </el-col>
     </el-row>
@@ -300,11 +352,11 @@
   </div>
 </template>
 <script>
-import { getInfo } from '@/api/luckyDraw'
+import { getInfo } from '@/api/luckyDrawWeek'
 import UserInfo from '@/components/UserInfo'
 
 export default {
-  name: 'LuckyDrawInfo',
+  name: 'LuckyDrawInfoWeek',
   components: { UserInfo },
   props: {
     luckyDrawId: {
@@ -319,11 +371,15 @@ export default {
       dialogUserInfo: false,
       user_id: 0,
       lucky_draw: {
-        lucky_two: {
+        lucky_week: {
           down_at: null,
           status: 0
+        },
+        goods: {
+          name: ''
         }
       },
+      festList: [],
       firstList: [],
       secondList: [],
       thirdList: [],
@@ -341,6 +397,7 @@ export default {
         this.selectListLoading = false
         this.noSelectListLoading = false
         this.lucky_draw = res.data.lucky_draw
+        this.festList = res.data.fest_list
         this.firstList = res.data.first_list
         this.secondList = res.data.second_list
         this.thirdList = res.data.third_list

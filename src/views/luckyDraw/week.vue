@@ -3,7 +3,7 @@
     <search
       :status-hidden="false"
       :status-list="statusList"
-      :export-hidden="false"
+      :export-hidden="true"
       :export-model="'lucky'"
       @search="fetchData"
     />
@@ -380,7 +380,7 @@
       :destroy-on-close="true"
       @close="dialogDraw = false;getList()"
     >
-      <draw ref="drawCom" :lucky-id="lucky.id" />
+      <draw-week ref="drawCom" :lucky-id="lucky.id" />
     </el-dialog>
   </div>
 
@@ -392,12 +392,12 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import Search from '@/components/Search'
 import Goods from '@/views/goods/goods'
 import Eggs from '@/views/egg/eggs'
-import Draw from '@/views/luckyDraw/draw'
+import DrawWeek from '@/views/luckyDraw/drawWeek'
 import { getToken } from '@/utils/auth'
 
 export default {
   name: 'ManageTwo',
-  components: { Pagination, Search, Goods, Draw, Eggs },
+  components: { Pagination, Search, Goods, DrawWeek, Eggs },
   props: {
     isSelect: {
       type: Boolean,

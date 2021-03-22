@@ -1,38 +1,57 @@
 import request from '@/utils/request'
 
-export function getRoutes() {
+export function postAdd(data) {
   return request({
-    url: '/vue-element-admin/routes',
-    method: 'get'
-  })
-}
-
-export function getRoles() {
-  return request({
-    url: '/vue-element-admin/roles',
-    method: 'get'
-  })
-}
-
-export function addRole(data) {
-  return request({
-    url: '/vue-element-admin/role',
+    url: 'admin/v2/role',
     method: 'post',
     data
   })
 }
 
-export function updateRole(id, data) {
+export function putEdit(data) {
   return request({
-    url: `/vue-element-admin/role/${id}`,
+    url: 'admin/v2/role',
     method: 'put',
     data
   })
 }
 
-export function deleteRole(id) {
+export function getList(params) {
   return request({
-    url: `/vue-element-admin/role/${id}`,
-    method: 'delete'
+    url: 'admin/v2/role/list',
+    method: 'get',
+    params
+  })
+}
+
+export function getAll(params) {
+  return request({
+    url: 'admin/v2/role/list/noPage',
+    method: 'get',
+    params
+  })
+}
+
+export function delItem(params) {
+  return request({
+    url: 'admin/v2/role',
+    method: 'delete',
+    params
+  })
+}
+
+export function scopeList(params) {
+  return request({
+    url: 'admin/v2/scopes/list',
+    method: 'get',
+    params
+  })
+}
+
+export function grantScope(params) {
+  return request({
+    url: 'admin/v2/role/scopes',
+    method: 'post',
+    params
   })
 }

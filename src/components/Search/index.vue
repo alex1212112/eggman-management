@@ -142,7 +142,7 @@ export default {
     },
     handleDownload() {
       // this.$emit('export')
-      window.open('https://api.caidan888.com/admin/v1/export/excel?model=' + this.exportModel)
+      window.open('https://api.caidan888.com/admin/v2/export/excel?model=' + this.exportModel)
     }
   }
 }

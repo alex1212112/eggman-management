@@ -18,7 +18,7 @@ export function putEdit(data) {
 
 export function putInfo(data) {
   return request({
-    url: 'admin/v1/order/expressInfo',
+    url: 'admin/v2/order/expressInfo',
     method: 'put',
     data
   })

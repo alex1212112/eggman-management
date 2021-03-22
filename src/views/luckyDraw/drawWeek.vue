@@ -1,9 +1,10 @@
 <template>
   <div class="app-container">
     <search
-      :status-hidden="true"
+      :status-hidden="false"
+      :status-list="statusList"
       :export-hidden="true"
-      :export-model="'userReal'"
+      :export-model="'luckyDraw'"
       @search="fetchData"
     />
     <el-table
@@ -14,48 +15,53 @@
       fit
       highlight-current-row
     >
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column align="center" label="开奖ID" width="95">
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="真实姓名" width="95">
+      <el-table-column align="center" label="抽奖ID" width="95">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          {{ scope.row.lucky_week_id }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="身份证号">
+      <el-table-column align="center" label="抽奖编号" width="180">
         <template slot-scope="scope">
-          {{ scope.row.id_card }}
+          {{ scope.row.lucky_draw_no }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="用户信息">
+      <el-table-column align="center" label="抽奖名称" width="180">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.nickname }}</el-tag><el-tag type="info">{{ scope.row.user_phone }}</el-tag>
+          {{ scope.row.lucky_week.name }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="认证时间">
+      <el-table-column align="center" label="开始时间" width="180">
         <template slot-scope="scope">
-          {{ scope.row.created_at }}
+          {{ scope.row.begin_at }}
         </template>
       </el-table-column>
-      <!--      <el-table-column label="状态" align="center">-->
-      <!--        <template slot-scope="scope">-->
-      <!--          <el-tag-->
-      <!--            :type="scope.row.status === 1 ? '' : scope.row.status === 2 ? 'success' : scope.row.status === 3 ? 'warning' : 'danger'"-->
-      <!--            effect="dark"-->
-      <!--          >-->
-      <!--            {{ scope.row.status_name }}-->
-      <!--          </el-tag>-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
-      <!--      <el-table-column align="center" label="操作" width="250">-->
-      <!--        <template slot-scope="scope">-->
-      <!--          <div class="operation-buttons">-->
-      <!--            <el-button v-if="scope.row.status === 1" type="primary" size="small" @click="express(scope.row, scope.$index)">发货</el-button>-->
-      <!--          </div>-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
+      <el-table-column align="center" label="开奖时间" width="180">
+        <template slot-scope="scope">
+          {{ scope.row.open_at }}
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" align="center">
+        <template slot-scope="scope">
+          <el-tag
+            :type="scope.row.status === 1 ? '' : scope.row.status === 2 ? 'warning' : scope.row.status === 3 ? 'success' : 'danger'"
+            effect="dark"
+          >
+            {{ scope.row.status_name }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="操作" width="250">
+        <template slot-scope="scope">
+          <div class="operation-buttons">
+            <el-button type="warning" size="small" @click="info(scope.row, scope.$index)">开奖详情</el-button>
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -66,27 +72,44 @@
       :limit.sync="listQuery.limit"
       @pagination="fetchData"
     />
+    <el-dialog
+      title="查看详情 "
+      :visible.sync="dialogInfo"
+      class="text-center"
+      center
+      width="90%"
+      :destroy-on-close="true"
+      @close="dialogInfo = false;getList()"
+    >
+      <lucky-draw-info-week ref="infoCom" :lucky-draw-id="luckyDraw.id" />
+    </el-dialog>
   </div>
 
 </template>
 
 <script>
-import { getList } from '@/api/userReal'
+import { getList } from '@/api/luckyDrawWeek'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import Search from '@/components/Search'
+import LuckyDrawInfoWeek from '@/components/LuckyDrawInfo/week'
 import { getToken } from '@/utils/auth'
 
 export default {
-  components: { Pagination, Search },
+  name: 'DrawWeek',
+  components: { Pagination, Search, LuckyDrawInfoWeek },
   props: {
     luckyId: {
       type: Number,
       default: 0
+    },
+    isSelect: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      statusList: [{ id: 0, name: '全部' }, { id: 1, name: '待支付' }, { id: 2, name: '支付成功' }, { id: 3, name: '已取消' }],
+      statusList: [{ id: 0, name: '全部' }, { id: 1, name: '抽奖中' }, { id: 2, name: '开奖中' }, { id: 3, name: '开奖成功' }],
       switchLoading: true,
       total: 0,
       list: null,
@@ -107,8 +130,10 @@ export default {
       dialogHintVisible: false,
       dialogVisible: false,
       dialogSelectGoods: false,
+      dialogInfo: false,
       dialogStatus: 'create',
-      real: {
+      luckyDraw: {
+        id: 0
       },
       tag: '',
       formLabelWidth: '120px'
@@ -142,6 +167,17 @@ export default {
       this.listQuery = Object.assign(this.listQuery, query)
       this.listQuery.lucky_id = this.luckyId
       console.log(this.listQuery)
+      this.getList()
+    },
+    info(item) {
+      this.dialogInfo = true
+      this.luckyDraw = item
+      this.$nextTick(() => {
+        this.$refs.infoCom.loadData(item.id)
+      })
+    },
+    loadData(id) {
+      this.listQuery.lucky_id = id
       this.getList()
     }
   }

@@ -2,7 +2,7 @@
   <div class="app-container">
     <search
       :status-hidden="true"
-      :export-hidden="false"
+      :export-hidden="true"
       :export-model="'eggs'"
       @search="fetchData"
     />

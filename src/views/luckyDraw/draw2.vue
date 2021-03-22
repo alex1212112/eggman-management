@@ -3,7 +3,7 @@
     <search
       :status-hidden="false"
       :status-list="statusList"
-      :export-hidden="false"
+      :export-hidden="true"
       :export-model="'luckyDraw'"
       @search="fetchData"
     />
@@ -101,6 +101,10 @@ export default {
     luckyId: {
       type: Number,
       default: 0
+    },
+    isSelect: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

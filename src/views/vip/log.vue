@@ -3,7 +3,7 @@
     <search
       :status-hidden="false"
       :status-list="statusList"
-      :export-hidden="false"
+      :export-hidden="true"
       :export-model="'log'"
       @search="fetchData"
     />
