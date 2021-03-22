@@ -23,6 +23,22 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    month: {
+      type: Array,
+      default: Array
+    },
+    wechatMini: {
+      type: Array,
+      default: Array
+    },
+    wechatApp: {
+      type: Array,
+      default: Array
+    },
+    aliPay: {
+      type: Array,
+      default: Array
     }
   },
   data() {
@@ -31,9 +47,11 @@ export default {
     }
   },
   mounted() {
+    console.log(this.month)
     this.$nextTick(() => {
       this.initChart()
     })
+    // this.initChart()
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -62,7 +80,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: this.month,
           axisTick: {
             alignWithLabel: true
           }
@@ -74,25 +92,25 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: '小程序支付',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
+          data: this.wechatMini,
           animationDuration
         }, {
-          name: 'pageB',
+          name: '微信APP支付',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
+          data: this.wechatApp,
           animationDuration
         }, {
-          name: 'pageC',
+          name: '支付宝支付',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
+          data: this.aliPay,
           animationDuration
         }]
       })

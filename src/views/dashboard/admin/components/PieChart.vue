@@ -21,6 +21,18 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    maleCount: {
+      type: Number,
+      default: 0
+    },
+    femaleCount: {
+      type: Number,
+      default: 0
+    },
+    unKnowCount: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -28,7 +40,11 @@ export default {
       chart: null
     }
   },
+  created() {
+    console.log(this.femaleCount)
+  },
   mounted() {
+    console.log(this.femaleCount)
     this.$nextTick(() => {
       this.initChart()
     })
@@ -52,21 +68,19 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          data: ['男', '女', '未知']
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '注册用户男女比例',
             type: 'pie',
             roseType: 'radius',
-            radius: [15, 95],
-            center: ['50%', '38%'],
+            radius: [50, 95],
+            center: ['50%', '48%'],
             data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
+              { value: this.maleCount, name: '男' },
+              { value: this.femaleCount, name: '女' },
+              { value: this.unKnowCount, name: '未知' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600
